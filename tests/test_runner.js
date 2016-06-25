@@ -42,7 +42,7 @@ describe('Dialogue', () => {
       expect(result).to.be.an.instanceof(yarn.LineResult);
     });
 
-    dialogue.runner.run = () => [new yarn.LineResult()];
+    dialogue.runner.run = () => { return [new yarn.LineResult()]; };
 
     dialogue.run().next();
 
@@ -58,7 +58,7 @@ describe('Dialogue', () => {
       expect(result).to.be.an.instanceof(yarn.OptionsResult);
     });
 
-    dialogue.runner.run = () => [new yarn.OptionsResult()];
+    dialogue.runner.run = () => { return [new yarn.OptionsResult()]; };
 
     loopToFinish(dialogue.run());
 
@@ -74,7 +74,7 @@ describe('Dialogue', () => {
       expect(result).to.be.an.instanceof(yarn.CommandResult);
     });
 
-    dialogue.runner.run = () => [new yarn.CommandResult()];
+    dialogue.runner.run = () => { return [new yarn.CommandResult()]; };
 
     loopToFinish(dialogue.run());
 
@@ -89,7 +89,7 @@ describe('Dialogue', () => {
       expect(result).to.be.an.instanceof(yarn.NodeCompleteResult);
     });
 
-    dialogue.runner.run = () => [new yarn.NodeCompleteResult()];
+    dialogue.runner.run = () => { return [new yarn.NodeCompleteResult()]; };
 
     loopToFinish(dialogue.run());
 
@@ -109,11 +109,13 @@ describe('Dialogue', () => {
       resultsCalled.push('nodecomplete');
     });
 
-    dialogue.runner.run = () => [
-      new yarn.OptionsResult(),
-      new yarn.NodeCompleteResult(),
-      new yarn.LineResult(),
-    ];
+    dialogue.runner.run = () => {
+      return [
+        new yarn.OptionsResult(),
+        new yarn.NodeCompleteResult(),
+        new yarn.LineResult(),
+      ];
+    };
 
     loopToFinish(dialogue.run());
 
@@ -133,7 +135,7 @@ describe('Dialogue', () => {
       resultsCalled.push('line');
     });
 
-    dialogue.runner.run = () => [new yarn.LineResult()];
+    dialogue.runner.run = () => { return [new yarn.LineResult()]; };
 
     loopToFinish(dialogue.run());
 

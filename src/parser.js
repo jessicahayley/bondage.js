@@ -22,9 +22,9 @@ const grammar = {
 const parser = new Parser(grammar);
 parser.lexer = new Lexer();
 
-console.log(parser.parse('HI'))
-console.log(parser.parse('HI\nHI'))
-console.log(parser.parse(' \nHI'))
+console.log(parser.parse('HI'));
+console.log(parser.parse('HI\nHI'));
+console.log(parser.parse(' \nHI'));
 // console.log(parser.parse('\nHI'))
 console.log(parser.parse('[[hi]]'));
 console.log(parser.parse('[[hi|yo]]'));
