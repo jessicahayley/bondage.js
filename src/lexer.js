@@ -6,6 +6,8 @@ const tokens = {
   // Things like function names, node names, etc
   IDENTIFIER: /[A-Za-z0-9_]+/,
 
+  NEWLINE: /\n/,
+
   OPTSTART: /\[\[/,
   OPTEND: /\]\]/,
   OPTSEP: /\|/,
@@ -63,6 +65,7 @@ class Lexer {
 
     this.states = {
       base: new LexState().addTransition('OPTSTART', 'option', true)
+                          .addTransition('NEWLINE')
                           .addTextRule(),
 
       option: new LexState().addTransition('OPTEND', 'base', true)
@@ -75,6 +78,8 @@ class Lexer {
     };
 
     this.state = 'base';
+
+    this.yytext = '';
   }
 
   setInput(text) {
@@ -96,6 +101,9 @@ class Lexer {
       // Take the matched text off the front of this.text
       const matchedText = match[0];
       this.text = this.text.substr(matchedText.length);
+
+      // Tell the parser what the text for this token is
+      this.yytext = matchedText;
 
       // If the rule points to a new state, change it now
       if (rule.state) {
