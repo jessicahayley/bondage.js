@@ -1,6 +1,7 @@
 'use strict';
 
 const results = require('./results.js');
+const parser = require('./parser.js');
 
 class Runner {
   constructor() {
@@ -28,50 +29,30 @@ class Runner {
     const curNode = this.nodes[startNode];
 
     if (curNode === undefined) {
-      throw new Error(`Node "${startNode}" does not exist`);
+      throw Error(`Node "${startNode}" does not exist`);
     }
-
-    const lines = curNode.body.split('\n');
-
-    // TODO: Write a real parser
 
     // Dictionary of option text -> name of destination node
     const options = {};
-    for (let line of lines) {
-      let optionStartPos = line.indexOf('[[');
-      let commandStartPos = line.indexOf('<<');
-
-      // While there are still options or commands in this line
-      while (optionStartPos !== -1 || commandStartPos !== -1) {
-        if (optionStartPos !== -1) {
-          // If we find an option get the text that is between the '[[' and ']]'
-          const fullOptionText = line.substring(line.indexOf('[[') + 2, line.indexOf(']]'));
-
-          // Split on the | for named links
-          const optionText = fullOptionText.split('|');
-
-          // Put the option into the options dictionary
-          // If there's no target node specified, just use the text
-          options[optionText[0]] = optionText[1] || optionText[0];
-
-          // Remove the option text from the line
-          line = line.replace(`[[${fullOptionText}]]`, '');
-        }
-        if (commandStartPos !== -1) {
-          // If we find a command get the text that is between the '<<' and '>>'
-          const commandText = line.substring(line.indexOf('<<') + 2, line.indexOf('>>'));
-
-          yield new results.CommandResult(commandText);
-
-          // Remove the option text from the line
-          line = line.replace(`<<${commandText}>>`, '');
-        }
-
-        optionStartPos = line.indexOf('[[');
-        commandStartPos = line.indexOf('<<');
-      }
-      if (line !== '') {
-        yield new results.LineResult(line);
+    for (const statement of parser.parse(curNode.body)) {
+      switch (statement.type) {
+        case 'text':
+          yield new results.LineResult(statement.text);
+          break;
+        case 'option':
+          if (statement.text !== undefined) {
+            options[statement.text] = statement.dest;
+          } else {
+            // If we found an option with no text, just make the text the dest as well for now
+            // TODO: to follow yarnspinner, we should automatically follow a textless option
+            options[statement.dest] = statement.dest;
+          }
+          break;
+        case 'command':
+          yield new results.CommandResult(statement.text);
+          break;
+        default:
+          throw Error(`Unknown statement: ${statement}`);
       }
     }
 
@@ -90,13 +71,13 @@ class Runner {
       if (choice === null) {
         // TODO: Can I make this so if they call next() again after choosing an option it'll still
         // work? Instead of just completely bailing on an error
-        throw new Error('No option was selected');
+        throw Error('No option was selected');
       }
 
       nextNode = options[choice];
 
       if (nextNode === undefined) {
-        throw new Error(`Invalid option selected, valid options are: ${Object.keys(options)}`);
+        throw Error(`Invalid option selected, valid options are: ${Object.keys(options)}`);
       }
     }
 

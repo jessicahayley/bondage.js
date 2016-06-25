@@ -29,7 +29,7 @@ class OptionsResult extends DialogueResult {
     if (this.choiceCallback) {
       this.choiceCallback(option);
     } else {
-      throw new Error('No choice callback has been set by the runner!');
+      throw Error('No choice callback has been set by the runner!');
     }
   }
 }

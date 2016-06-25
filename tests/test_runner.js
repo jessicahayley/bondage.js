@@ -294,8 +294,8 @@ describe('Dialogue', () => {
 
     const expectedLines = [
       'COMMAND: command1',
-      'COMMAND: command2',
       'text in between commands',
+      'COMMAND: command2',
       'COMMAND: command3',
     ];
 

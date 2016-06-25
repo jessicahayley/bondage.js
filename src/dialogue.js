@@ -34,7 +34,7 @@ class Dialogue extends EventEmitter {
       } else if (result instanceof results.NodeCompleteResult) {
         this.emit('nodecomplete', result);
       } else {
-        throw new Error(`Unrecognized dialogue result: ${result}`);
+        throw Error(`Unrecognized dialogue result: ${result}`);
       }
 
       yield result;
