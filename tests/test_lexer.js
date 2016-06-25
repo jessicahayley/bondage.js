@@ -66,4 +66,13 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('OPTEND');
     expect(lexer.lex()).to.equal('TEXT');
   });
+
+  it('can tokenize a command', () => {
+    const lexer = new Lexer();
+    lexer.setInput('<<option>>');
+
+    expect(lexer.lex()).to.equal('CMDSTART');
+    expect(lexer.lex()).to.equal('TEXT');
+    expect(lexer.lex()).to.equal('CMDEND');
+  });
 });

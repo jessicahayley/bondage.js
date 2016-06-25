@@ -11,6 +11,9 @@ const tokens = {
   OPTSTART: /\[\[/,
   OPTEND: /\]\]/,
   OPTSEP: /\|/,
+
+  CMDSTART: /<</,
+  CMDEND: />>/,
 };
 
 class LexState {
@@ -42,8 +45,10 @@ class LexState {
     // match all text, up to any of those transitions
     const rules = [];
     for (const trans of this.transitions) {
-      // Surround the rule in parens
-      rules.push(`(${trans.regex.source})`);
+      if (trans.delimitsText) {
+        // Surround the rule in parens
+        rules.push(`(${trans.regex.source})`);
+      }
     }
 
     // Join the rules that we got above on a |, then put them all into a negative lookahead
@@ -65,6 +70,7 @@ class Lexer {
 
     this.states = {
       base: new LexState().addTransition('OPTSTART', 'option', true)
+                          .addTransition('CMDSTART', 'command', true)
                           .addTransition('NEWLINE')
                           .addTextRule(),
 
@@ -75,6 +81,8 @@ class Lexer {
       optiondest: new LexState().addTransition('OPTEND', 'base')
                                 .addTransition('IDENTIFIER'),
 
+      command: new LexState().addTransition('CMDEND', 'base', true)
+                             .addTextRule(),
     };
 
     this.state = 'base';

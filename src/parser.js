@@ -15,6 +15,7 @@ const grammar = {
       ['TEXT', '$$ = { text: $1, type: "text" }'],
       ['OPTSTART TEXT OPTEND', '$$ = { dest: $2, type: "option" }'],
       ['OPTSTART TEXT OPTSEP IDENTIFIER OPTEND', '$$ = { text: $2, dest: $4, type: "option" }'],
+      ['CMDSTART TEXT CMDEND', '$$ = { text: $2, type: "command" }'],
     ],
   },
 };

@@ -71,4 +71,15 @@ describe('Parser', () => {
 
     expect(results).to.deep.equal(expected);
   });
+
+  it('can parse some text followed by a newline and a command', () => {
+    const results = parser.parse('some text\n<<commandtext>>');
+
+    const expected = [
+      { text: 'some text', type: 'text' },
+      { text: 'commandtext', type: 'command' },
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
 });
