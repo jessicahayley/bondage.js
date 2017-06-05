@@ -103,7 +103,7 @@ class Lexer {
       this.yytext = '';
 
       return 'Indent';
-    } else if (thisIndentation < this.getLastRecordedIndentation[0]) {
+    } else if (thisIndentation < this.getLastRecordedIndentation()[0]) {
       const indent = this.indentation.pop();
       if (indent[1]) {
         this.yytext = '';
