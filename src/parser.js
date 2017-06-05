@@ -1,5 +1,5 @@
 const Parser = require('jison').Parser;
-const Lexer = require('./lexer.js');
+const Lexer = require('./lexer/lexer.js');
 
 const grammar = {
   bnf: {
