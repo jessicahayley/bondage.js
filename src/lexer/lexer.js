@@ -113,6 +113,10 @@ class Lexer {
       this.lexNextTokenOnCurrentLine();
     }
 
+    if (thisIndentation === this.previousLevelOfIndentation && this.yylloc.last_column === 1) {
+      this.yylloc.last_column += thisIndentation;
+    }
+
     if (this.getCurrentLine().substring(this.yylloc.last_column - 1).startsWith('//')) {
       return this.lexNextLine();
     }
