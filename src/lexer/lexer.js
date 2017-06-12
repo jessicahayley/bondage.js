@@ -73,7 +73,7 @@ class Lexer {
       // Now that we're at the end of the text, we'll emit as many
       // `Dedent` as necessary, to get back to 0-indentation.
       const indent = this.indentation.pop();
-      if (indent[1]) { return 'Dedent'; }
+      if (indent && indent[1]) { return 'Dedent'; }
 
       return 'EndOfInput';
     }
@@ -153,7 +153,7 @@ class Lexer {
         this.setState(rule.state);
 
         if (this.shouldTrackNextIndentation) {
-          if (this.getLastRecordedIndentation[0] < thisIndentation) {
+          if (this.getLastRecordedIndentation()[0] < thisIndentation) {
             this.indentation.push([thisIndentation, false]);
           }
         }
@@ -258,6 +258,10 @@ class Lexer {
   }
 
   getLastRecordedIndentation() {
+    if (this.indentation.length === 0) {
+      return [0, false];
+    }
+
     return this.indentation[this.indentation.length - 1];
   }
 
