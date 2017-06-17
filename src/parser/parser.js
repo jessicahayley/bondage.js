@@ -34,40 +34,26 @@ const grammar = {
     ],
 
     conditionalStatement: [
-      ['BeginCommand If expression EndCommand statementInConditions BeginCommand EndIf EndCommand', '$$ = new yy.IfNode($3, $5);'],
-      ['BeginCommand If expression EndCommand statementInConditions additionalConditionalStatements', '$$ = new yy.IfElseNode($3, $5, $6);'],
+      ['BeginCommand If expression EndCommand statements BeginCommand EndIf EndCommand', '$$ = new yy.IfNode($3, $5);'],
+      ['BeginCommand If expression EndCommand statements additionalConditionalStatements', '$$ = new yy.IfElseNode($3, $5, $6);'],
     ],
 
     additionalConditionalStatements: [
-      ['BeginCommand Else EndCommand statementInConditions BeginCommand EndIf EndCommand', '$$ = new yy.ElseNode($4);'],
-      ['BeginCommand ElseIf expression EndCommand statementInConditions additionalConditionalStatements', '$$ = new yy.ElseIfNode($3, $5, $6);'],
+      ['BeginCommand Else EndCommand statements BeginCommand EndIf EndCommand', '$$ = new yy.ElseNode($4);'],
+      ['BeginCommand ElseIf expression EndCommand statements additionalConditionalStatements', '$$ = new yy.ElseIfNode($3, $5, $6);'],
     ],
 
     statement: [
-      ['specials', '$$ = $1;'],
-      ['Text', '$$ = new yy.TextNode($1);'],
-    ],
-
-    statementInConditions: [
-      ['specials', '$$ = $1;'],
-      ['dialogueLines', '$$ = $1;'],
-    ],
-
-    specials: [
-      ['shortcuts', '$$ = new yy.DialogNode($1);'],
+      ['shortcut', '$$ = $1;'],
       ['command', '$$ = $1;'],
       ['link', '$$ = $1;'],
       ['assignment', '$$ = $1;'],
+      ['Text', '$$ = new yy.TextNode($1);'],
     ],
 
     link: [
       ['OptionStart Text OptionEnd', '$$ = new yy.LinkNode($2);'],
       ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.LinkNode($2, $4);'],
-    ],
-
-    shortcuts: [
-      ['shortcuts shortcut', '$$ = $1.concat([$2]);'],
-      ['shortcut', '$$ = [$1];'],
     ],
 
     shortcut: [
@@ -134,11 +120,6 @@ const grammar = {
       ['Number', '$$ = new yy.NumericLiteralNode($1);'],
       ['String', '$$ = new yy.StringLiteralNode($1);'],
       ['Variable', '$$ = new yy.VariableNode($1.substring(1));'],
-    ],
-
-    dialogueLines: [
-      ['dialogueLines Text', '$$ = $1.concat([new yy.TextNode($2)]);'],
-      ['Text', '$$ = [new yy.TextNode($1)];'],
     ],
   },
 };
