@@ -53,7 +53,7 @@ const grammar = {
 
     link: [
       ['OptionStart Text OptionEnd', '$$ = new yy.LinkNode($2);'],
-      ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.LinkNode($2, $4);'],
+      ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.LinkNode($4, $2);'],
     ],
 
     shortcut: [

@@ -13,7 +13,7 @@ module.exports = {
   DialogNode: class {
     constructor(content, name) {
       this.type = 'DialogNode';
-      this.content = name || null;
+      this.name = name || null;
       this.content = content;
     }
   },
@@ -80,8 +80,8 @@ module.exports = {
   LinkNode: class {
     constructor(text, identifier) {
       this.type = 'LinkNode';
-      this.text = text;
-      this.identifier = identifier || null;
+      this.identifier = identifier;
+      this.text = text || null;
     }
   },
 
