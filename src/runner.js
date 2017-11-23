@@ -1,7 +1,7 @@
 'use strict';
 
 const results = require('./results.js');
-const parser = require('./parser.js');
+const parser = require('./parser/parser.js');
 
 class Runner {
   constructor() {
@@ -25,7 +25,7 @@ class Runner {
   * Generator to return each sequential dialogue result starting from the given node
   * @param {string} [startNode] - The name of the node to begin at
   */
-  *run(startNode) {
+  * run(startNode) {
     const curNode = this.nodes[startNode];
 
     if (curNode === undefined) {

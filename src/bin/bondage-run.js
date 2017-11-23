@@ -5,7 +5,7 @@
 const fs = require('fs');
 const program = require('commander');
 const inquirer = require('inquirer');
-const bondage = require('../src/bondage.js');
+const bondage = require('../bondage.js');
 
 function runDialogue(files) {
   let node = program.startNode;
@@ -42,7 +42,7 @@ function runDialogue(files) {
       message: ' ',
       choices: result.options,
       type: 'list',
-    }]).then(answer => {
+    }]).then((answer) => {
       // Tell the dialogue which option was chosen
       result.choose(answer.response);
 
@@ -57,9 +57,9 @@ function runDialogue(files) {
 
 // Set up the program
 program
+  .description('Spin the yarn')
   .arguments('<file...>')
   .option('-s, --start-node [name]', 'The name of the node to start from [Start]')
   .action((files) => {
     runDialogue(files);
-  })
-  .parse(process.argv);
+  });

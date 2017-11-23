@@ -16,7 +16,7 @@ class Dialogue extends EventEmitter {
   * @param {string} [startNode=Start] - Name of the node to start the dialogue from
   * @return {*DialogueResult} An iterator that returns the next DialogueResult in sequence
   */
-  *run(startNode) {
+  * run(startNode) {
     let node = startNode;
     if (node === undefined) {
       node = 'Start';
