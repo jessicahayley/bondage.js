@@ -5,311 +5,89 @@
 
 const fs = require('fs');
 const chai = require('chai');
+const bondage = require('../src/bondage.js');
+
 const expect = chai.expect;
-const yarn = require('../src/bondage.js');
 
 describe('Dialogue', () => {
-  let dialogue;
-
   let oneNodeYarnData;
   let threeNodeYarnData;
   let namedLinkYarnData;
-  let commandsYarnData;
+  let shortcutsYarnData;
 
-  const loopToFinish = it => {
-    // Loop over the given iterator until it finishes
-
-    // eslint-disable-next-line no-unused-vars, no-empty
-    for (const _ of it) { }
-  };
+  let runner;
 
   before(() => {
     oneNodeYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/onenode.json'));
     threeNodeYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/threenodes.json'));
     namedLinkYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/namedlink.json'));
-    commandsYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/commands.json'));
+    shortcutsYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/shortcuts.json'));
   });
 
   beforeEach(() => {
-    dialogue = new yarn.Dialogue();
+    runner = new bondage.Runner();
   });
 
-  it('emits a line event if it gets a line result', () => {
-    let lineCallbackCalled = false;
+  it('Can run through a single node', () => {
+    runner.load(oneNodeYarnData);
+    const run = runner.run('Start');
 
-    dialogue.on('line', (result) => {
-      lineCallbackCalled = true;
-      expect(result).to.be.an.instanceof(yarn.LineResult);
-    });
-
-    dialogue.runner.run = () => { return [new yarn.LineResult()]; };
-
-    dialogue.run().next();
-
-    expect(lineCallbackCalled).to.be.true;
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
+    expect(run.next().done).to.be.true;
   });
 
-  it('emits an options event if it gets an options result', () => {
-    let optionsCallbackCalled = false;
+  it('Can start at a different node', () => {
+    runner.load(threeNodeYarnData);
+    const run = runner.run('Option2');
 
-    dialogue.on('options', (result) => {
-      optionsCallbackCalled = true;
-
-      expect(result).to.be.an.instanceof(yarn.OptionsResult);
-    });
-
-    dialogue.runner.run = () => { return [new yarn.OptionsResult()]; };
-
-    loopToFinish(dialogue.run());
-
-    expect(optionsCallbackCalled).to.be.true;
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line'));
+    expect(run.next().done).to.be.true;
   });
 
-  it('emits an command event if it gets an command result', () => {
-    let commandCallbackCalled = false;
+  it('Can run through a link to another node', () => {
+    runner.load(threeNodeYarnData);
+    const run = runner.run('Start');
 
-    dialogue.on('command', (result) => {
-      commandCallbackCalled = true;
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is another test line'));
 
-      expect(result).to.be.an.instanceof(yarn.CommandResult);
-    });
+    const optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option1', 'Option2']));
 
-    dialogue.runner.run = () => { return [new yarn.CommandResult()]; };
+    optionResult.select(0);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line'));
 
-    loopToFinish(dialogue.run());
+    expect(run.next().done).to.be.true;
+  });
+  it('Can run through a named link to another node', () => {
+    runner.load(namedLinkYarnData);
+    const run = runner.run('Start');
 
-    expect(commandCallbackCalled).to.be.true;
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is another test line'));
+
+    const optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option1', 'Option2']));
+
+    optionResult.select(1);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Dest2\'s test line'));
+
+    expect(run.next().done).to.be.true;
   });
 
-  it('emits a nodecomplete event if it gets an node complete result', () => {
-    let nodecompleteCallbackCalled = false;
+  it('Can run through shortcuts', () => {
+    runner.load(shortcutsYarnData);
+    const run = runner.run('Start');
 
-    dialogue.on('nodecomplete', (result) => {
-      nodecompleteCallbackCalled = true;
-      expect(result).to.be.an.instanceof(yarn.NodeCompleteResult);
-    });
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
 
-    dialogue.runner.run = () => { return [new yarn.NodeCompleteResult()]; };
+    const optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option 1', 'Option 2']));
 
-    loopToFinish(dialogue.run());
+    optionResult.select(1);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is the second option'));
 
-    expect(nodecompleteCallbackCalled).to.be.true;
-  });
-
-  it('emits result events in order that they are given', () => {
-    const resultsCalled = [];
-
-    dialogue.on('line', () => {
-      resultsCalled.push('line');
-    });
-    dialogue.on('options', () => {
-      resultsCalled.push('options');
-    });
-    dialogue.on('nodecomplete', () => {
-      resultsCalled.push('nodecomplete');
-    });
-
-    dialogue.runner.run = () => {
-      return [
-        new yarn.OptionsResult(),
-        new yarn.NodeCompleteResult(),
-        new yarn.LineResult(),
-      ];
-    };
-
-    loopToFinish(dialogue.run());
-
-    expect(resultsCalled).to.deep.equal(['options', 'nodecomplete', 'line']);
-  });
-
-  it('emits a start and finish result before/after other results', () => {
-    const resultsCalled = [];
-
-    dialogue.on('start', () => {
-      resultsCalled.push('start');
-    });
-    dialogue.on('finish', () => {
-      resultsCalled.push('finish');
-    });
-    dialogue.on('line', () => {
-      resultsCalled.push('line');
-    });
-
-    dialogue.runner.run = () => { return [new yarn.LineResult()]; };
-
-    loopToFinish(dialogue.run());
-
-    expect(resultsCalled).to.deep.equal(['start', 'line', 'finish']);
-  });
-
-  it('is able to load yarn data into the runner', () => {
-    const outputData = {
-      Start: {
-        tags: 'Tag',
-        body: 'This is a test line',
-      },
-    };
-
-    expect(dialogue.runner.nodes).to.deep.equal({});
-
-    dialogue.load(oneNodeYarnData);
-
-    expect(dialogue.runner.nodes).to.deep.equal(outputData);
-  });
-
-  it('is able to run through yarn data with named options, when choosing the first option', () => {
-    // We'll keep track of all lines to make sure they were given in order
-    // Whenever options appear, we'll just say [[OPTIONS]] so we know they were displayed
-    const lines = [];
-
-    const expectedLines = [
-      'This is a test line',
-      'This is another test line',
-      '[[OPTIONS]]',
-      'This is Dest1\'s test line',
-    ];
-
-    const expectedOptions = [
-      'Option1',
-      'Option2',
-    ];
-
-    dialogue.load(namedLinkYarnData);
-
-    dialogue.on('line', (result) => {
-      lines.push(result.text);
-    });
-    dialogue.on('options', (result) => {
-      lines.push('[[OPTIONS]]'); // Just to make sure they were displayed in the correct place
-      expect(result.options).to.deep.equal(expectedOptions);
-
-      result.choose(result.options[0]);
-    });
-
-    loopToFinish(dialogue.run());
-
-    expect(lines).to.deep.equal(expectedLines);
-  });
-
-  it('is able to run through yarn data with options, when choosing the first option', () => {
-    // We'll keep track of all lines to make sure they were given in order
-    // Whenever options appear, we'll just say [[OPTIONS]] so we know they were displayed
-    const lines = [];
-
-    const expectedLines = [
-      'This is a test line',
-      'This is another test line',
-      '[[OPTIONS]]',
-      'This is Option1\'s test line',
-    ];
-
-    const expectedOptions = [
-      'Option1',
-      'Option2',
-    ];
-
-    dialogue.load(threeNodeYarnData);
-
-    dialogue.on('line', (result) => {
-      lines.push(result.text);
-    });
-    dialogue.on('options', (result) => {
-      lines.push('[[OPTIONS]]'); // Just to make sure they were displayed in the correct place
-      expect(result.options).to.deep.equal(expectedOptions);
-
-      result.choose(result.options[0]);
-    });
-
-    loopToFinish(dialogue.run());
-
-    expect(lines).to.deep.equal(expectedLines);
-  });
-
-  it('is able to run through yarn data with an option, when choosing the second option', () => {
-    // We'll keep track of all lines to make sure they were given in order
-    // Whenever options appear, we'll just say [[OPTIONS]] so we know they were displayed
-    const lines = [];
-
-    const expectedLines = [
-      'This is a test line',
-      'This is another test line',
-      '[[OPTIONS]]',
-      'This is Option2\'s test line',
-    ];
-
-    const expectedOptions = [
-      'Option1',
-      'Option2',
-    ];
-
-    dialogue.load(threeNodeYarnData);
-
-    dialogue.on('line', (result) => {
-      lines.push(result.text);
-    });
-    dialogue.on('options', (result) => {
-      lines.push('[[OPTIONS]]'); // Just to make sure they were displayed in the correct place
-      expect(result.options).to.deep.equal(expectedOptions);
-
-      result.choose(result.options[1]);
-    });
-
-    loopToFinish(dialogue.run());
-
-    expect(lines).to.deep.equal(expectedLines);
-  });
-
-  it('emits a nodecomplete event when it finishes parsing a node', () => {
-    // We'll keep track of all lines to make sure they were given in order
-    const lines = [];
-
-    const expectedLines = [
-      'This is a test line',
-      'This is another test line',
-      'NODECOMPLETE: Start',
-      'This is Option1\'s test line',
-      'NODECOMPLETE: Option1',
-    ];
-
-    dialogue.load(threeNodeYarnData);
-
-    dialogue.on('line', (result) => {
-      lines.push(result.text);
-    });
-    dialogue.on('options', (result) => {
-      result.choose(result.options[0]);
-    });
-    dialogue.on('nodecomplete', (result) => {
-      lines.push(`NODECOMPLETE: ${result.nodeName}`);
-    });
-
-    loopToFinish(dialogue.run());
-
-    expect(lines).to.deep.equal(expectedLines);
-  });
-
-  it('handles commands when they are inline or on their own line', () => {
-    // We'll keep track of all lines to make sure they were given in order
-    const lines = [];
-
-    const expectedLines = [
-      'COMMAND: command1',
-      'text in between commands',
-      'COMMAND: command2',
-      'COMMAND: command3',
-    ];
-
-    dialogue.load(commandsYarnData);
-
-    dialogue.on('line', (result) => {
-      lines.push(result.text);
-    });
-    dialogue.on('command', (result) => {
-      lines.push(`COMMAND: ${result.command}`);
-    });
-
-    loopToFinish(dialogue.run());
-
-    expect(lines).to.deep.equal(expectedLines);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is after both options'));
+    expect(run.next().done).to.be.true;
   });
 });
