@@ -80,8 +80,8 @@ module.exports = {
   LinkNode: class {
     constructor(text, identifier) {
       this.type = 'LinkNode';
-      this.identifier = identifier;
       this.text = text || null;
+      this.identifier = identifier || this.text; // [[Destination Text]]
     }
   },
 
