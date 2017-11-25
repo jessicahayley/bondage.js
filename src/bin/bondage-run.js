@@ -6,6 +6,7 @@ const fs = require('fs');
 const program = require('commander');
 const inquirer = require('inquirer');
 const Bondage = require('../bondage.js');
+const results = require('../results.js');
 
 function runDialogue(files) {
   let node = program.startNode;
@@ -23,7 +24,12 @@ function runDialogue(files) {
 
   const d = dialogue.run(node);
 
-  for (const _ of d) { }
+  for (const result of d) {
+    console.log(result);
+    if (result instanceof results.OptionsResult) {
+      result.select(1);
+    }
+  }
 }
 
 // Set up the program
