@@ -85,6 +85,19 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
+  it('can parse a shortcut command', () => {
+    const results = parser.parse('text\n-> shortcut1\n\tText1\n-> shortcut2\n\tText2\nmore text');
+
+    const expected = [
+      new nodes.TextNode('text'),
+      new nodes.DialogOptionNode('shortcut1', [new nodes.TextNode('Text1')]),
+      new nodes.DialogOptionNode('shortcut2', [new nodes.TextNode('Text2')]),
+      new nodes.TextNode('more text'),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
   it('correctly ignores a double newline', () => {
     const results = parser.parse('some text\n\n<<commandtext>>');
 
