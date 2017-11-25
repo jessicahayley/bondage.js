@@ -108,7 +108,9 @@ const grammar = {
     ],
 
     command: [
-      ['BeginCommand Text EndCommand', '$$ = new yy.CommandNode($1);'],
+      // TODO: not sure why this breaks without also specifying identifiers
+      ['BeginCommand Identifier EndCommand', '$$ = new yy.CommandNode($2);'],
+      ['BeginCommand Text EndCommand', '$$ = new yy.CommandNode($2);'],
     ],
 
     arguments: [
