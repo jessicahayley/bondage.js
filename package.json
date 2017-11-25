@@ -4,11 +4,11 @@
   "description": "Yarn parser for Javascript",
   "main": "src/bondage.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha tests --recursive || exit 0",
-    "lint": "node_modules/.bin/eslint . || exit 0"
+    "test": "node_modules/mocha/bin/mocha tests --recursive",
+    "lint": "node_modules/.bin/eslint ."
   },
   "bin": {
-    "bondage": "bin/bondage_runner.js"
+    "bondage": "bin/bondage.js"
   },
   "repository": {
     "type": "git",
