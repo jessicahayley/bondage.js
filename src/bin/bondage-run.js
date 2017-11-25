@@ -63,3 +63,5 @@ program
   .action((files) => {
     runDialogue(files);
   });
+
+program.parse(process.argv);
