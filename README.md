@@ -25,9 +25,11 @@ Now you can use the `bondage` command to run through Yarn files from the command
 
 **Examples**
 
-* Running a single file from the default start node (named "Start"): `bondage yarnfile.json`
-* Running a single file from the specified node name: `bondage -s StartNode yarnfile.json`
-* Running multiple files from the specified node name: `bondage -s StartNode yarnfile1.json yarnfile2.json ...`
+* Running a single file from the default start node (named "Start"): `bondage run yarnfile.json`
+* Running a single file from the specified node name: `bondage run -s StartNode yarnfile.json`
+* Running multiple files from the specified node name: `bondage run -s StartNode yarnfile1.json yarnfile2.json ...`
+* See the compiled ast: `bondage run --ast yarnfile.json`
+* See the tokenized input: `bondage run --tokens yarnfile.json`
 
 #### As a Library
 
@@ -43,50 +45,27 @@ Installation: `npm install bondage`
 const fs = require('fs');
 const bondage = require('bondage');
 
-const dialogue = new bondage.Dialogue();
+const runner = new bondage.Runner();
 const yarnData = JSON.parse(fs.readFileSync('yarnFile.json'));
 
-dialogue.load(yarnData);
-
-dialogue.on('start', () => {
-  // Called before dialogue is ran
-});
-dialogue.on('finish', () => {
-  // Called after dialogue has finished
-});
-
-dialogue.on('line', (result) => {
-  // Called when a line of text should be displayed
-  console.log(result.text);
-});
-dialogue.on('options', (result) => {
-  // Called when there is a choice to be made
-  // result.options is a list of options
-  for (const option of result.options) {
-    console.log(option);
-  }
-
-  // Specify which option is chosen (must be called before the next iteration of the loop)
-  result.choose(result.options[0]);
-});
-dialogue.on('command', (result) => {
-  // Called when a command like <<command text>> is encountered
-  console.log(result.command);
-});
-dialogue.on('nodecomplete', (result) => {
-  // Called when we finish a node
-  console.log(result.nodeName);
-});
+runner.load(yarnData);
 
 // Loop over the dialogue from the node titled 'Start'
-// The result returned to this loop is the same as the ones passed to the listeners above, but
-// the attached event listeners get called before the result is returned to this loop
-for (const result of dialogue.run('Start')) {
+for (const result of runner.run('Start')) {
   // Do something else with the result
+  if (result instanceof bondage.TextResult) {
+    console.log(result.text);
+  } else if (result instanceof bondage.OptionsResult) {
+    // This works for both links between nodes and shortcut options
+    console.log(result.options);
+
+    // Select based on the option's index in the array
+    result.select(1);
+  }
 }
 
 // Advance the dialogue manually from the node titled 'Start'
-const d = dialogue.run('Start')
+const d = runner.run('Start')
 let result = d.next().value;
 let nextResult = d.next().value;
 // And so on
