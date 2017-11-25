@@ -4,8 +4,9 @@
 'use strict';
 
 const chai = require('chai');
-const expect = chai.expect;
 const Lexer = require('../src/lexer/lexer.js');
+
+const expect = chai.expect;
 
 describe('Lexer', () => {
   it('can tokenize some text', () => {
@@ -22,6 +23,7 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('OptionStart');
     expect(lexer.lex()).to.equal('Text');
     expect(lexer.lex()).to.equal('OptionEnd');
+    expect(lexer.lex()).to.equal('EndOfInput');
   });
 
   it('can tokenize a named option', () => {
@@ -33,6 +35,7 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('OptionDelimit');
     expect(lexer.lex()).to.equal('Identifier');
     expect(lexer.lex()).to.equal('OptionEnd');
+    expect(lexer.lex()).to.equal('EndOfInput');
   });
 
   it('can tokenize some text followed by an option', () => {
@@ -43,6 +46,7 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('OptionStart');
     expect(lexer.lex()).to.equal('Text');
     expect(lexer.lex()).to.equal('OptionEnd');
+    expect(lexer.lex()).to.equal('EndOfInput');
   });
 
   it('can tokenize an option followed by some text', () => {
@@ -53,6 +57,7 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('Text');
     expect(lexer.lex()).to.equal('OptionEnd');
     expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('EndOfInput');
   });
 
   it('can tokenize a named option followed by some text', () => {
@@ -65,6 +70,7 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('Identifier');
     expect(lexer.lex()).to.equal('OptionEnd');
     expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('EndOfInput');
   });
 
   it('can tokenize a command', () => {
@@ -74,5 +80,25 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('BeginCommand');
     expect(lexer.lex()).to.equal('Identifier');
     expect(lexer.lex()).to.equal('EndCommand');
+    expect(lexer.lex()).to.equal('EndOfInput');
+  });
+
+  it('can tokenize shortcut options', () => {
+    const lexer = new Lexer();
+    lexer.setInput('text\n-> shortcut1\n\tText1\n-> shorcut2\n\tText2\nmore text');
+
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('ShortcutOption');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Indent');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Dedent');
+    expect(lexer.lex()).to.equal('ShortcutOption');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Indent');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Dedent');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('EndOfInput');
   });
 });
