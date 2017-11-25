@@ -5,7 +5,7 @@
 
 const chai = require('chai');
 const expect = chai.expect;
-const parser = require('../src/parser.js');
+const parser = require('../src/parser/parser.js');
 
 describe('Parser', () => {
   it('can parse simple text', () => {

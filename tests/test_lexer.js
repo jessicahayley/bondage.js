@@ -5,7 +5,7 @@
 
 const chai = require('chai');
 const expect = chai.expect;
-const Lexer = require('../src/lexer.js');
+const Lexer = require('../src/lexer/lexer.js');
 
 describe('Lexer', () => {
   it('can tokenize some text', () => {
