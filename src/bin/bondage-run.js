@@ -23,11 +23,34 @@ function runDialogue(files) {
 
   const d = dialogue.run(node);
 
-  for (const result of d) {
-    if (result instanceof bondage.OptionsResult) {
-      result.select(1);
+  const run = () => {
+    const result = d.next().value;
+    if (!result) {
+      return;
     }
-  }
+
+    if (result.options) {
+      const options = [];
+      for (const i in result.options) {
+        options.push({ value: i, name: result.options[i] });
+      }
+
+      inquirer.prompt([{
+        name: 'response',
+        message: ' ',
+        choices: options,
+        type: 'list',
+      }]).then((answer) => {
+        result.select(answer.response);
+        run();
+      });
+    } else {
+      console.log(result.text); // eslint-disable-line
+      run();
+    }
+  };
+
+  run();
 }
 
 // Set up the program
