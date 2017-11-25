@@ -85,7 +85,7 @@ describe('Lexer', () => {
 
   it('can tokenize shortcut options', () => {
     const lexer = new Lexer();
-    lexer.setInput('text\n-> shortcut1\n\tText1\n-> shorcut2\n\tText2\nmore text');
+    lexer.setInput('text\n-> shortcut1\n\tText1\n-> shortcut2\n\tText2\nmore text');
 
     expect(lexer.lex()).to.equal('Text');
     expect(lexer.lex()).to.equal('ShortcutOption');
