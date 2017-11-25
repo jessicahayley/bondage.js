@@ -1,56 +1,35 @@
-'use strict';
+'use string';
 
-class DialogueResult {
-}
+class Result {}
 
-class LineResult extends DialogueResult {
+class TextResult extends Result {
+  /**
+   * Create a text display result
+   * @param {string} [text] text to be displayed
+   */
   constructor(text) {
     super();
-
     this.text = text;
   }
 }
 
-class OptionsResult extends DialogueResult {
+class OptionsResult extends Result {
+  /**
+   * Create a selectable list of options from the given list of text
+   * @param {string[]} [options] list of the text of options to be shown
+   */
   constructor(options) {
     super();
-
     this.options = options;
-
-    // Callback to be set by the runner to be notified about the choice
-    this.choiceCallback = null;
+    this.selected = -1;
   }
 
-  /**
-  * Choose the given option
-  * @param {string} option - The option that the user chose
-  */
-  choose(option) {
-    if (this.choiceCallback) {
-      this.choiceCallback(option);
-    } else {
-      throw Error('No choice callback has been set by the runner!');
+  select(index) {
+    if (index < 0 || index >= this.options.length) {
+      throw new Error(`Cannot select option #${index}, there are only ${this.options.length} options`);
     }
+    this.selected = index;
   }
 }
 
-class CommandResult extends DialogueResult {
-  constructor(command) {
-    super();
-    this.command = command;
-  }
-}
-
-class NodeCompleteResult extends DialogueResult {
-  constructor(nodeName) {
-    super();
-    this.nodeName = nodeName;
-  }
-}
-
-module.exports = {
-  LineResult: LineResult,
-  OptionsResult: OptionsResult,
-  CommandResult: CommandResult,
-  NodeCompleteResult: NodeCompleteResult,
-};
+module.exports = { Result, TextResult, OptionsResult };

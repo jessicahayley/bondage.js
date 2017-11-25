@@ -1,5 +1,10 @@
 'use strict';
 
+// A 'text' attribute on any node indicates text that is to be displayed
+//  to the user
+// If a node with a 'text' attribute has a 'selectable' attribute set to true
+//  it will be presented to the user as an option
+
 module.exports = {
   RootNode: class {
     constructor(dialogNodes) {
@@ -21,6 +26,7 @@ module.exports = {
   DialogOptionNode: class {
     constructor(text, content) {
       this.type = 'DialogOptionNode';
+      this.selectable = true;
       this.text = text;
       this.content = content;
     }
@@ -29,6 +35,7 @@ module.exports = {
   ConditionalDialogOptionNode: class {
     constructor(text, content, conditionalExpression) {
       this.type = 'ConditionalDialogOptionNode';
+      this.selectable = true;
       this.text = text;
       this.content = content;
       this.conditionalExpression = conditionalExpression;
@@ -80,6 +87,7 @@ module.exports = {
   LinkNode: class {
     constructor(text, identifier) {
       this.type = 'LinkNode';
+      this.selectable = true;
       this.text = text || null;
       this.identifier = identifier || this.text; // [[Destination Text]]
     }

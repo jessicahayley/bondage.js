@@ -207,7 +207,7 @@ class Lexer {
    */
   setState(state) {
     if (this.states[state] === undefined) {
-      throw Error(`Cannot set the unknown state [${state}]`);
+      throw new Error(`Cannot set the unknown state [${state}]`);
     }
 
     this.state = state;

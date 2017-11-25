@@ -50,7 +50,7 @@ class LexerState {
    */
   addTextRule(type, state) {
     if (this.textRule) {
-      throw Error('Cannot add more than one text rule to a state.');
+      throw new Error('Cannot add more than one text rule to a state.');
     }
 
     // Go through the regex of the other transitions in this state, and create a regex that will

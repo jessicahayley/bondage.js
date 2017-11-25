@@ -1,20 +1,20 @@
 'use strict';
 
-const results = require('./results.js');
 const parser = require('./parser/parser.js');
+const results = require('./results.js');
 
 class Runner {
   constructor() {
-    this.nodes = {};
+    this.yarnNodes = {};
   }
 
   /**
-  * Loads the node data into this.nodes and strips out unneeded information
-  * @param [object] data - Object of exported yarn JSON data
+  * Loads the yarn node data into this.nodes and strips out unneeded information
+  * @param {any[]} data Object of exported yarn JSON data
   */
   load(data) {
     for (const node of data) {
-      this.nodes[node.title] = {
+      this.yarnNodes[node.title] = {
         tags: node.tags,
         body: node.body,
       };
@@ -23,72 +23,59 @@ class Runner {
 
   /**
   * Generator to return each sequential dialogue result starting from the given node
-  * @param {string} [startNode] - The name of the node to begin at
+  * @param {string} [startNode] - The name of the yarn node to begin at
   */
   * run(startNode) {
-    const curNode = this.nodes[startNode];
+    const yarnNode = this.yarnNodes[startNode];
 
-    if (curNode === undefined) {
-      throw Error(`Node "${startNode}" does not exist`);
+    if (yarnNode === undefined) {
+      throw new Error(`Node "${startNode}" does not exist`);
     }
 
-    // Dictionary of option text -> name of destination node
-    const options = {};
-    for (const statement of parser.parse(curNode.body)) {
-      switch (statement.type) {
-        case 'text':
-          yield new results.LineResult(statement.text);
-          break;
-        case 'option':
-          if (statement.text !== undefined) {
-            options[statement.text] = statement.dest;
+    // Parse the entire node
+    const statements = Array.from(parser.parse(yarnNode.body));
+    yield* this.evalStatements(statements);
+  }
+
+  /**
+   * Evaluate a list of statements, yielding the ones that need to be seen by
+   * the user. Calls itself recursively if that is required by nested nodes
+   * @param {any[]} statements
+   */
+  * evalStatements(statements) {
+    let selectionStatements = null;
+
+    // Yield the individual statements
+    // Need to accumulate all adjacent selectables into one list (hence some of
+    //  the weirdness here)
+    for (const statement of statements) { // esline-disable-line no-restricted-syntax
+      console.log(statement);
+      if (selectionStatements !== null && statement.selectable) {
+        // We're accumulating selection statements, so add this one to the list
+        selectionStatements.push(statement);
+        // This is not a selectable node, so yield the options first
+      } else {
+        if (selectionStatements !== null) {
+          // We're accumulating selections, but this isn't one, so we're done
+          // Need to yield the accumulated selections first
+          yield new results.OptionsResult(selectionStatements.map((s) => { return s.text; }));
+          selectionStatements = null;
+        }
+
+        if (statement.text) {
+          if (statement.selectable) {
+            // Some sort of selectable node, so start accumulating them
+            selectionStatements = [statement];
           } else {
-            // If we found an option with no text, just make the text the dest as well for now
-            // TODO: to follow yarnspinner, we should automatically follow a textless option
-            options[statement.dest] = statement.dest;
+            // Just text to be returned
+            yield new results.TextResult(statement.text);
           }
-          break;
-        case 'command':
-          yield new results.CommandResult(statement.text);
-          break;
-        default:
-          throw Error(`Unknown statement: ${statement}`);
+        } else {
+          // TODO: eval command statements (aka non user-visible commands)
+        }
       }
-    }
-
-    let nextNode = null;
-
-    if (Object.keys(options).length > 0) {
-      const result = new results.OptionsResult(Object.keys(options));
-      let choice = null;
-      result.choiceCallback = (option) => {
-        // We should be given the text for the option
-        choice = option;
-      };
-
-      yield result;
-
-      if (choice === null) {
-        // TODO: Can I make this so if they call next() again after choosing an option it'll still
-        // work? Instead of just completely bailing on an error
-        throw Error('No option was selected');
-      }
-
-      nextNode = options[choice];
-
-      if (nextNode === undefined) {
-        throw Error(`Invalid option selected, valid options are: ${Object.keys(options)}`);
-      }
-    }
-
-    yield new results.NodeCompleteResult(startNode);
-
-    if (nextNode !== null) {
-      yield* this.run(nextNode);
     }
   }
 }
 
-module.exports = {
-  Runner: Runner,
-};
+module.exports = Runner;

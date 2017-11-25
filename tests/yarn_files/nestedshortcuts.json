@@ -1,0 +1,12 @@
+[
+	{
+		"title": "Start",
+		"tags": "Tag",
+		"body": "This is a test line\n-> Option 1\n\tThis is the first option\n\t-> Sub option 1\n\t\tThis is the first nested option\n\t-> Sub option 2\n\t\tThis is the second nested option\n\tThis is after the second nested option\n-> Option 2\n\tThis is the second option\nThis is after both options",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	}
+]
