@@ -59,6 +59,7 @@ class Runner {
           // We're accumulating selections, but this isn't one, so we're done
           // Need to yield the accumulated selections first
           yield* this.handleSelections(selectionStatements);
+          selectionStatements = null;
         }
 
         if (statement.text) {
@@ -103,4 +104,8 @@ class Runner {
   }
 }
 
-module.exports = Runner;
+module.exports = {
+  Runner,
+  TextResult: results.TextResult,
+  OptionResult: results.OptionsResult,
+};

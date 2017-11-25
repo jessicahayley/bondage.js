@@ -5,8 +5,7 @@
 const fs = require('fs');
 const program = require('commander');
 const inquirer = require('inquirer');
-const Bondage = require('../bondage.js');
-const results = require('../results.js');
+const bondage = require('../bondage.js');
 
 function runDialogue(files) {
   let node = program.startNode;
@@ -14,7 +13,7 @@ function runDialogue(files) {
     node = 'Start';
   }
 
-  const dialogue = new Bondage();
+  const dialogue = new bondage.Runner();
 
   // First, load all of the files that we were given
   for (const file of files) {
@@ -25,8 +24,7 @@ function runDialogue(files) {
   const d = dialogue.run(node);
 
   for (const result of d) {
-    console.log(result);
-    if (result instanceof results.OptionsResult) {
+    if (result instanceof bondage.OptionsResult) {
       result.select(1);
     }
   }
