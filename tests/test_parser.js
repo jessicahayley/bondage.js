@@ -4,15 +4,17 @@
 'use strict';
 
 const chai = require('chai');
-const expect = chai.expect;
 const parser = require('../src/parser/parser.js');
+const nodes = require('../src/parser/nodes.js');
+
+const expect = chai.expect;
 
 describe('Parser', () => {
   it('can parse simple text', () => {
     const results = parser.parse('some text');
 
     const expected = [
-      { text: 'some text', type: 'text' },
+      new nodes.TextNode('some text'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -22,7 +24,7 @@ describe('Parser', () => {
     const results = parser.parse('[[optiondest]]');
 
     const expected = [
-      { dest: 'optiondest', type: 'option' },
+      new nodes.LinkNode('optiondest'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -32,7 +34,7 @@ describe('Parser', () => {
     const results = parser.parse('[[option text|optiondest]]');
 
     const expected = [
-      { dest: 'optiondest', text: 'option text', type: 'option' },
+      new nodes.LinkNode('option text', 'optiondest'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -42,9 +44,9 @@ describe('Parser', () => {
     const results = parser.parse('[[text1|dest1]][[text2|dest2]]\n[[text3|dest3]]');
 
     const expected = [
-      { dest: 'dest1', text: 'text1', type: 'option' },
-      { dest: 'dest2', text: 'text2', type: 'option' },
-      { dest: 'dest3', text: 'text3', type: 'option' },
+      new nodes.LinkNode('text1', 'dest1'),
+      new nodes.LinkNode('text2', 'dest2'),
+      new nodes.LinkNode('text3', 'dest3'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -54,8 +56,8 @@ describe('Parser', () => {
     const results = parser.parse('some text [[optiondest]]');
 
     const expected = [
-      { text: 'some text ', type: 'text' },
-      { dest: 'optiondest', type: 'option' },
+      new nodes.TextNode('some text '),
+      new nodes.LinkNode('optiondest'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -65,8 +67,8 @@ describe('Parser', () => {
     const results = parser.parse('some text\n[[optiondest]]');
 
     const expected = [
-      { text: 'some text', type: 'text' },
-      { dest: 'optiondest', type: 'option' },
+      new nodes.TextNode('some text'),
+      new nodes.LinkNode('optiondest'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -76,8 +78,8 @@ describe('Parser', () => {
     const results = parser.parse('some text\n<<commandtext>>');
 
     const expected = [
-      { text: 'some text', type: 'text' },
-      { text: 'commandtext', type: 'command' },
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -87,8 +89,8 @@ describe('Parser', () => {
     const results = parser.parse('some text\n\n<<commandtext>>');
 
     const expected = [
-      { text: 'some text', type: 'text' },
-      { text: 'commandtext', type: 'command' },
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext'),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -98,8 +100,8 @@ describe('Parser', () => {
     const results = parser.parse('some text\n\n\n\n\n\n<<commandtext>>\n');
 
     const expected = [
-      { text: 'some text', type: 'text' },
-      { text: 'commandtext', type: 'command' },
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext'),
     ];
 
     expect(results).to.deep.equal(expected);
