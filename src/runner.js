@@ -33,52 +33,52 @@ class Runner {
     }
 
     // Parse the entire node
-    const statements = Array.from(parser.parse(yarnNode.body));
-    yield* this.evalStatements(statements);
+    const parserNodes = Array.from(parser.parse(yarnNode.body));
+    yield* this.evalNodes(parserNodes);
   }
 
   /**
-   * Evaluate a list of statements, yielding the ones that need to be seen by
+   * Evaluate a list of parser nodes, yielding the ones that need to be seen by
    * the user. Calls itself recursively if that is required by nested nodes
-   * @param {any[]} statements
+   * @param {any[]} nodes
    */
-  * evalStatements(statements) {
-    let selectionStatements = null;
+  * evalNodes(nodes) {
+    let selectableNodes = null;
 
 
-    // Yield the individual statements
+    // Yield the individual user-visible results
     // Need to accumulate all adjacent selectables into one list (hence some of
     //  the weirdness here)
-    for (const statement of statements) { // esline-disable-line no-restricted-syntax
-      if (selectionStatements !== null && statement.selectable) {
-        // We're accumulating selection statements, so add this one to the list
-        selectionStatements.push(statement);
+    for (const node of nodes) {
+      if (selectableNodes !== null && node.selectable) {
+        // We're accumulating selection nodes, so add this one to the list
+        selectableNodes.push(node);
         // This is not a selectable node, so yield the options first
       } else {
-        if (selectionStatements !== null) {
+        if (selectableNodes !== null) {
           // We're accumulating selections, but this isn't one, so we're done
           // Need to yield the accumulated selections first
-          yield* this.handleSelections(selectionStatements);
-          selectionStatements = null;
+          yield* this.handleSelections(selectableNodes);
+          selectableNodes = null;
         }
 
-        if (statement.text) {
-          if (statement.selectable) {
+        if (node.text) {
+          if (node.selectable) {
             // Some sort of selectable node, so start accumulating them
-            selectionStatements = [statement];
+            selectableNodes = [node];
           } else {
             // Just text to be returned
-            yield new results.TextResult(statement.text);
+            yield new results.TextResult(node.text);
           }
         } else {
-          // TODO: eval command statements (aka non user-visible commands)
+          // TODO: evaluate assignments, conditionals, and commands
         }
       }
     }
 
-    if (selectionStatements !== null) {
+    if (selectableNodes !== null) {
       // At the end of the node, but we still need to handle any final options
-      yield* this.handleSelections(selectionStatements);
+      yield* this.handleSelections(selectableNodes);
     }
   }
 
@@ -94,8 +94,8 @@ class Runner {
       // Something was selected
       const selectedOption = selections[optionResults.selected];
       if (selectedOption.content) {
-        // Recursively go through the nested statements in the node
-        yield* this.evalStatements(selectedOption.content);
+        // Recursively go through the nodes nested within
+        yield* this.evalNodes(selectedOption.content);
       } else if (selectedOption.identifier) {
         // Run the new node
         yield* this.run(selectedOption.identifier);
