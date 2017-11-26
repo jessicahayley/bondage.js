@@ -107,6 +107,8 @@ class Lexer {
       const indent = this.indentation.pop();
       if (indent[1]) {
         this.yytext = '';
+        this.previousLevelOfIndentation = this.getLastRecordedIndentation()[0];
+
         return 'Dedent';
       }
 

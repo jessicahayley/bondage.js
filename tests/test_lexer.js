@@ -101,4 +101,40 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('Text');
     expect(lexer.lex()).to.equal('EndOfInput');
   });
+
+  it('can tokenize nested shortcut options', () => {
+    const lexer = new Lexer();
+    lexer.setInput('text\n-> shortcut1\n\tText1\n\t-> nestedshortcut1\n\t\tNestedText1\n\t-> nestedshortcut2\n\t\tNestedText2\n-> shortcut2\n\tText2\nmore text');
+
+    expect(lexer.lex()).to.equal('Text');
+
+    expect(lexer.lex()).to.equal('ShortcutOption');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Indent');
+
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('ShortcutOption');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Indent');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Dedent');
+
+    expect(lexer.lex()).to.equal('ShortcutOption');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Indent');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Dedent');
+
+    expect(lexer.lex()).to.equal('Dedent');
+
+    expect(lexer.lex()).to.equal('ShortcutOption');
+    expect(lexer.lex()).to.equal('Text');
+
+    expect(lexer.lex()).to.equal('Indent');
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('Dedent');
+
+    expect(lexer.lex()).to.equal('Text');
+    expect(lexer.lex()).to.equal('EndOfInput');
+  });
 });

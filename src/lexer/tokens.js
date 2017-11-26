@@ -11,7 +11,7 @@ const Tokens = {
   Whitespace:           null,                      // (not used currently)
   Indent:               null,
   Dedent:               null,
-  EndOfLine:            null,                      // (not nused currently)
+  EndOfLine:            null,                      // (not used currently)
   EndOfInput:           null,
 
   UnaryMinus:           null,                      // -; this is differentiated from Minus

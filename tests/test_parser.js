@@ -98,6 +98,27 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
+  it('can parse nested shortcut commands', () => {
+    const results = parser.parse('text\n-> shortcut1\n\tText1\n\t-> nestedshortcut1\n\t\tNestedText1\n\t-> nestedshortcut2\n\t\tNestedText2\n-> shortcut2\n\tText2\nmore text');
+
+    const expected = [
+      new nodes.TextNode('text'),
+      new nodes.DialogOptionNode('shortcut1', [
+        new nodes.TextNode('Text1'),
+        new nodes.DialogOptionNode('nestedshortcut1', [
+          new nodes.TextNode('NestedText1'),
+        ]),
+        new nodes.DialogOptionNode('nestedshortcut2', [
+          new nodes.TextNode('NestedText2'),
+        ]),
+      ]),
+      new nodes.DialogOptionNode('shortcut2', [new nodes.TextNode('Text2')]),
+      new nodes.TextNode('more text'),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
   it('correctly ignores a double newline', () => {
     const results = parser.parse('some text\n\n<<commandtext>>');
 

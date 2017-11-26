@@ -12,7 +12,7 @@ class LexerState {
     /** A special, unique transition for matching spans of text in any state. */
     this.textRule = null;
     /**
-     * Wether or not this state is context-bound by indentation
+     * Whether or not this state is context-bound by indentation
      * (will make the lexer emit Indent and Dedent tokens).
      */
     this.isTrackingNextIndentation = false;

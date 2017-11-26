@@ -77,7 +77,7 @@ describe('Dialogue', () => {
 
   it('Can run through shortcuts', () => {
     runner.load(shortcutsYarnData);
-    const run = runner.run('Start');
+    const run = runner.run('NonNested');
 
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
 
@@ -88,6 +88,27 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is the second option'));
 
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is after both options'));
+    expect(run.next().done).to.be.true;
+  });
+  it('Can run through nested shortcuts', () => {
+    runner.load(shortcutsYarnData);
+    const run = runner.run('Nested');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('text'));
+
+    let optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['shortcut1', 'shortcut2']));
+
+    optionResult.select(0);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text1'));
+
+    optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['nestedshortcut1', 'nestedshortcut2']));
+
+    optionResult.select(1);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('NestedText2'));
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('more text'));
     expect(run.next().done).to.be.true;
   });
 });
