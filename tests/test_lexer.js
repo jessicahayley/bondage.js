@@ -137,4 +137,50 @@ describe('Lexer', () => {
     expect(lexer.lex()).to.equal('Text');
     expect(lexer.lex()).to.equal('EndOfInput');
   });
+
+  it('can tokenize a simple command', () => {
+    const lexer = new Lexer();
+    lexer.setInput('<<testcommand>>');
+
+    expect(lexer.lex()).to.equal('BeginCommand');
+    expect(lexer.lex()).to.equal('Identifier');
+    expect(lexer.lex()).to.equal('EndCommand');
+    expect(lexer.lex()).to.equal('EndOfInput');
+  });
+
+  it('can tokenize a simple assignment', () => {
+    const lexer = new Lexer();
+    lexer.setInput('<<set $testvar = -4.3>>');
+
+    expect(lexer.lex()).to.equal('BeginCommand');
+    expect(lexer.lex()).to.equal('Set');
+    expect(lexer.lex()).to.equal('Variable');
+    expect(lexer.lex()).to.equal('EqualToOrAssign');
+    expect(lexer.lex()).to.equal('Number');
+    expect(lexer.lex()).to.equal('EndCommand');
+    expect(lexer.lex()).to.equal('EndOfInput');
+  });
+
+  it('can tokenize an assignment involving arithmetic', () => {
+    const lexer = new Lexer();
+    lexer.setInput('<<set $testvar = -4.3 - (1 + 2) * 3.1 / 5>>');
+
+    expect(lexer.lex()).to.equal('BeginCommand');
+    expect(lexer.lex()).to.equal('Set');
+    expect(lexer.lex()).to.equal('Variable');
+    expect(lexer.lex()).to.equal('EqualToOrAssign');
+    expect(lexer.lex()).to.equal('Number');
+    expect(lexer.lex()).to.equal('Minus');
+    expect(lexer.lex()).to.equal('LeftParen');
+    expect(lexer.lex()).to.equal('Number');
+    expect(lexer.lex()).to.equal('Add');
+    expect(lexer.lex()).to.equal('Number');
+    expect(lexer.lex()).to.equal('RightParen');
+    expect(lexer.lex()).to.equal('Multiply');
+    expect(lexer.lex()).to.equal('Number');
+    expect(lexer.lex()).to.equal('Divide');
+    expect(lexer.lex()).to.equal('Number');
+    expect(lexer.lex()).to.equal('EndCommand');
+    expect(lexer.lex()).to.equal('EndOfInput');
+  });
 });
