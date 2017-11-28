@@ -85,6 +85,37 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
+  it('can parse a simple assignment', () => {
+    const results = parser.parse('<<set $testvar = 5>>');
+
+    const expected = [
+      new nodes.SetVariableEqualToNode('testvar', new nodes.NumericLiteralNode('5')),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can parse an assignment involving arithmetic', () => {
+    const results = parser.parse('<<set $testvar = -4.3 - (1 + 2) * 3.1 / 5>>');
+
+    const expected = [
+      new nodes.SetVariableEqualToNode(
+        'testvar',
+        new nodes.ArithmeticExpressionMinusNode(
+          new nodes.NumericLiteralNode('-4.3'),
+          new nodes.ArithmeticExpressionDivideNode(
+            new nodes.ArithmeticExpressionMultiplyNode(
+              new nodes.ArithmeticExpressionNode(
+                new nodes.ArithmeticExpressionAddNode(
+                  new nodes.NumericLiteralNode('1'),
+                  new nodes.NumericLiteralNode('2'))),
+              new nodes.NumericLiteralNode('3.1')),
+            new nodes.NumericLiteralNode('5')))),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
   it('can parse a shortcut command', () => {
     const results = parser.parse('text\n-> shortcut1\n\tText1\n-> shortcut2\n\tText2\nmore text');
 
