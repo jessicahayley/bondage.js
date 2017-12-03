@@ -10,9 +10,7 @@ const bondage = require('../src/bondage.js');
 const expect = chai.expect;
 
 describe('Dialogue', () => {
-  let oneNodeYarnData;
-  let threeNodeYarnData;
-  let namedLinkYarnData;
+  let linksYarnData;
   let shortcutsYarnData;
   let assignmentYarnData;
   let conditionalYarnData;
@@ -20,9 +18,7 @@ describe('Dialogue', () => {
   let runner;
 
   before(() => {
-    oneNodeYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/onenode.json'));
-    threeNodeYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/threenodes.json'));
-    namedLinkYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/namedlink.json'));
+    linksYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/links.json'));
     shortcutsYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/shortcuts.json'));
     assignmentYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/assignment.json'));
     conditionalYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/conditions.json'));
@@ -33,15 +29,15 @@ describe('Dialogue', () => {
   });
 
   it('Can run through a single node', () => {
-    runner.load(oneNodeYarnData);
-    const run = runner.run('Start');
+    runner.load(linksYarnData);
+    const run = runner.run('OneNode');
 
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
     expect(run.next().done).to.be.true;
   });
 
   it('Can start at a different node', () => {
-    runner.load(threeNodeYarnData);
+    runner.load(linksYarnData);
     const run = runner.run('Option2');
 
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line'));
@@ -49,8 +45,8 @@ describe('Dialogue', () => {
   });
 
   it('Can run through a link to another node', () => {
-    runner.load(threeNodeYarnData);
-    const run = runner.run('Start');
+    runner.load(linksYarnData);
+    const run = runner.run('ThreeNodes');
 
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is another test line'));
@@ -63,18 +59,19 @@ describe('Dialogue', () => {
 
     expect(run.next().done).to.be.true;
   });
+
   it('Can run through a named link to another node', () => {
-    runner.load(namedLinkYarnData);
-    const run = runner.run('Start');
+    runner.load(linksYarnData);
+    const run = runner.run('NamedLink');
 
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is another test line'));
 
     const optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option1', 'Option2']));
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['First choice', 'Second choice']));
 
     optionResult.select(1);
-    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Dest2\'s test line'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line'));
 
     expect(run.next().done).to.be.true;
   });
@@ -237,7 +234,7 @@ describe('Dialogue', () => {
     expect(runner.variables.get('secondvar')).to.equal(-4.3 + 100);
 
     expect(run.next().done).to.be.true;
-  })
+  });
 
   it('Can handle an if conditional', () => {
     runner.load(conditionalYarnData);

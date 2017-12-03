@@ -1,6 +1,16 @@
 [
 	{
-		"title": "Start",
+		"title": "OneNode",
+		"tags": "Tag",
+		"body": "This is a test line",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "ThreeNodes",
 		"tags": "",
 		"body": "This is a test line\nThis is another test line[[Option1]]\n[[Option2]]",
 		"position": {
@@ -23,6 +33,16 @@
 		"title": "Option2",
 		"tags": "",
 		"body": "This is Option2's test line",
+		"position": {
+			"x": 774,
+			"y": 404
+		},
+		"colorID": 0
+	},
+	{
+		"title": "NamedLink",
+		"tags": "",
+		"body": "This is a test line\nThis is another test line\n[[First choice|Option1]]\n[[Second choice|Option2]]",
 		"position": {
 			"x": 774,
 			"y": 404
