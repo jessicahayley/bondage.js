@@ -190,6 +190,21 @@ describe('Dialogue', () => {
     expect(run.next().done).to.be.true;
   });
 
+  it('Can evaluate a boolean assignment with expression', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('BooleanExpression');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('testvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('testvar')).to.equal(true);
+
+    expect(run.next().done).to.be.true;
+  });
+
   it('Can evaluate an assignment from one variable to another', () => {
     runner.load(assignmentYarnData);
     const run = runner.run('Variable');

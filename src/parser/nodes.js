@@ -194,86 +194,97 @@ module.exports = {
 
   // /////////////// Boolean Expression Nodes
 
-  BooleanExpressionNode: class {
+  BooleanExpressionNode: class extends Expression {
     constructor(booleanExpression) {
+      super();
       this.type = 'BooleanExpressionNode';
       this.booleanExpression = booleanExpression;
     }
   },
 
-  NegatedBooleanExpressionNode: class {
+  NegatedBooleanExpressionNode: class extends Expression {
     constructor(booleanExpression) {
+      super();
       this.type = 'NegatedBooleanExpressionNode';
       this.booleanExpression = booleanExpression;
     }
   },
 
-  BooleanOrExpressionNode: class {
+  BooleanOrExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'BooleanOrExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  BooleanAndExpressionNode: class {
+  BooleanAndExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'BooleanAndExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  BooleanXorExpressionNode: class {
+  BooleanXorExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'BooleanXorExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  EqualToExpressionNode: class {
+  EqualToExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'EqualToExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  NotEqualToExpressionNode: class {
+  NotEqualToExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'EqualToExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  GreaterThanExpressionNode: class {
+  GreaterThanExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'GreaterThanExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  GreaterThanOrEqualToExpressionNode: class {
+  GreaterThanOrEqualToExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'GreaterThanOrEqualToExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  LessThanExpressionNode: class {
+  LessThanExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'LessThanExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  LessThanOrEqualToExpressionNode: class {
+  LessThanOrEqualToExpressionNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'LessThanOrEqualToExpressionNode';
       this.expression1 = expression1;
       this.expression2 = expression2;

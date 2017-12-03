@@ -175,6 +175,37 @@ class Runner {
       } else if (node.type === 'ArithmeticExpressionDivideNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) /
                this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'BooleanExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.booleanExpression);
+      } else if (node.type === 'NegatedBooleanExpressionNode') {
+        return !this.evaluateExpressionOrLiteral(node.booleanExpression);
+      } else if (node.type === 'BooleanOrExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) ||
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'BooleanAndExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) &&
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'BooleanXorExpressionNode') {
+        return !this.evaluateExpressionOrLiteral(node.expression1) !== // Cheating
+               !this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'EqualToExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) ===
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'NotEqualToExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) !==
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'GreaterThanExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) >
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'GreaterThanOrEqualToExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) >=
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'LessThanExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) <
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'LessThenOrEqualToExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) <=
+               this.evaluateExpressionOrLiteral(node.expression2);
       }
 
       throw new Error(`I don't recognize expression type ${node.type}`);

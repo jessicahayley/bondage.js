@@ -49,6 +49,16 @@
 		"colorID": 0
 	},
 	{
+		"title": "BooleanExpression",
+		"tags": "Tag",
+		"body": "Test Line\n<<set $testvar = (true || false) && (false || !false)>>\nTest Line After",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
 		"title": "Variable",
 		"tags": "Tag",
 		"body": "Test Line\n<<set $firstvar = \"First variable string\">><<set $secondvar = $firstvar>>\nTest Line After",
