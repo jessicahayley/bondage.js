@@ -1,10 +1,5 @@
 'use strict';
 
-// Magic properties:
-// * text: indicates text that is to be displayed to the user
-// * selectable: if true, present it as an option to the user (requires text property)
-// TODO: just use inheritance and instanceof for this
-
 class Text { }
 class Selectable { }
 class Conditional { }
@@ -39,18 +34,18 @@ module.exports = {
     }
   },
 
-  DialogOptionNode: class {
+  DialogOptionNode: class extends Selectable {
     constructor(text, content) {
+      super();
       this.type = 'DialogOptionNode';
       this.text = text;
       this.content = content;
-
-      this.selectable = true;
     }
   },
 
-  ConditionalDialogOptionNode: class {
+  ConditionalDialogOptionNode: class extends Selectable {
     constructor(text, content, conditionalExpression) {
+      super();
       this.type = 'ConditionalDialogOptionNode';
       this.text = text;
       this.content = content;
@@ -93,15 +88,17 @@ module.exports = {
   },
 
   // /////////////// Contents Nodes
-  TextNode: class {
+  TextNode: class extends Text {
     constructor(text) {
+      super();
       this.type = 'TextNode';
       this.text = text;
     }
   },
 
-  LinkNode: class {
+  LinkNode: class extends Selectable {
     constructor(text, identifier) {
+      super();
       this.type = 'LinkNode';
       this.text = text || null;
       this.identifier = identifier || this.text; // [[Destination Text]]

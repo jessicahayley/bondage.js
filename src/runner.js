@@ -67,7 +67,7 @@ class Runner {
     // Need to accumulate all adjacent selectables into one list (hence some of
     //  the weirdness here)
     for (const node of nodes) {
-      if (selectableNodes !== null && node.selectable) {
+      if (selectableNodes !== null && node instanceof nodeTypes.Selectable) {
         // We're accumulating selection nodes, so add this one to the list
         // TODO: handle conditional option nodes
         selectableNodes.push(node);
@@ -80,14 +80,12 @@ class Runner {
           selectableNodes = null;
         }
 
-        if (node.text) {
-          if (node.selectable) {
-            // Some sort of selectable node, so start accumulating them
-            selectableNodes = [node];
-          } else {
-            // Just text to be returned
-            yield new results.TextResult(node.text);
-          }
+        if (node instanceof nodeTypes.Text) {
+          // Just text to be returned
+          yield new results.TextResult(node.text);
+        } else if (node instanceof nodeTypes.Selectable) {
+          // Some sort of selectable node, so start accumulating them
+          selectableNodes = [node];
         } else if (node instanceof nodeTypes.Assignment) {
           this.evaluateAssignment(node);
         } else if (node.conditional instanceof nodeTypes.Conditional) {
