@@ -54,16 +54,18 @@ module.exports = {
   },
 
   // /////////////// Conditional Nodes
-  IfNode: class {
+  IfNode: class extends Conditional {
     constructor(expression, statement) {
+      super();
       this.type = 'IfNode';
       this.expression = expression;
       this.statement = statement;
     }
   },
 
-  IfElseNode: class {
+  IfElseNode: class extends Conditional {
     constructor(expression, statement, elseStatement) {
+      super();
       this.type = 'IfElseNode';
       this.expression = expression;
       this.statement = statement;
@@ -71,15 +73,17 @@ module.exports = {
     }
   },
 
-  ElseNode: class {
+  ElseNode: class extends Conditional {
     constructor(statement) {
+      super();
       this.type = 'ElseNode';
       this.statement = statement;
     }
   },
 
-  ElseIfNode: class {
+  ElseIfNode: class extends Conditional {
     constructor(expression, statement, elseStatement) {
+      super();
       this.type = 'ElseIfNode';
       this.expression = expression;
       this.statement = statement;

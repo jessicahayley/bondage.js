@@ -15,6 +15,7 @@ describe('Dialogue', () => {
   let namedLinkYarnData;
   let shortcutsYarnData;
   let assignmentYarnData;
+  let conditionalYarnData;
 
   let runner;
 
@@ -24,6 +25,7 @@ describe('Dialogue', () => {
     namedLinkYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/namedlink.json'));
     shortcutsYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/shortcuts.json'));
     assignmentYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/assignment.json'));
+    conditionalYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/conditions.json'));
   });
 
   beforeEach(() => {
@@ -233,6 +235,50 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
 
     expect(runner.variables.get('secondvar')).to.equal(-4.3 + 100);
+
+    expect(run.next().done).to.be.true;
+  })
+
+  it('Can handle an if conditional', () => {
+    runner.load(conditionalYarnData);
+    const run = runner.run('BasicIf');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text before'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Inside if'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text after'));
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can handle an if else conditional', () => {
+    runner.load(conditionalYarnData);
+    const run = runner.run('BasicIfElse');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text before'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Inside else'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text after'));
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can handle an if else if conditional', () => {
+    runner.load(conditionalYarnData);
+    const run = runner.run('BasicIfElseIf');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text before'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Inside elseif'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text after'));
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can handle an if else if else conditional', () => {
+    runner.load(conditionalYarnData);
+    const run = runner.run('BasicIfElseIfElse');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text before'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Inside else'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Text after'));
 
     expect(run.next().done).to.be.true;
   });

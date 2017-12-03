@@ -60,8 +60,9 @@ class Runner {
    * @param {any[]} nodes
    */
   * evalNodes(nodes) {
-    let selectableNodes = null;
+    if (!nodes) return;
 
+    let selectableNodes = null;
 
     // Yield the individual user-visible results
     // Need to accumulate all adjacent selectables into one list (hence some of
@@ -88,7 +89,7 @@ class Runner {
           selectableNodes = [node];
         } else if (node instanceof nodeTypes.Assignment) {
           this.evaluateAssignment(node);
-        } else if (node.conditional instanceof nodeTypes.Conditional) {
+        } else if (node instanceof nodeTypes.Conditional) {
           // Run the results of the conditional
           yield* this.evalNodes(this.evaluateConditional(node));
         }
@@ -151,7 +152,23 @@ class Runner {
    * Returns the statements to be run as a result of it (if any)
    */
   evaluateConditional(node) {
+    if (node.type === 'IfNode') {
+      if (this.evaluateExpressionOrLiteral(node.expression)) {
+        return node.statement;
+      }
+    } else if (node.type === 'IfElseNode' || node.type === 'ElseIfNode') {
+      if (this.evaluateExpressionOrLiteral(node.expression)) {
+        return node.statement;
+      }
 
+      if (node.elseStatement) {
+        return this.evaluateConditional(node.elseStatement);
+      }
+    } else if (node.type === 'ElseNode') {
+      return node.statement;
+    }
+
+    return null;
   }
 
   /**

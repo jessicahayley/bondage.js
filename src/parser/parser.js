@@ -40,6 +40,7 @@ const grammar = {
 
     additionalConditionalStatements: [
       ['BeginCommand Else EndCommand statements BeginCommand EndIf EndCommand', '$$ = new yy.ElseNode($4);'],
+      ['BeginCommand ElseIf expression EndCommand statements BeginCommand EndIf EndCommand', '$$ = new yy.ElseIfNode($3, $5);'],
       ['BeginCommand ElseIf expression EndCommand statements additionalConditionalStatements', '$$ = new yy.ElseIfNode($3, $5, $6);'],
     ],
 
