@@ -2,10 +2,13 @@
 
 const parser = require('./parser/parser.js');
 const results = require('./results.js');
+const DefaultVariableStorage = require('./default-variable-storage.js');
+const nodeTypes = require('./parser/nodes.js').types;
 
 class Runner {
   constructor() {
     this.yarnNodes = {};
+    this.variables = new DefaultVariableStorage();
   }
 
   /**
@@ -19,6 +22,20 @@ class Runner {
         body: node.body,
       };
     }
+  }
+
+  /**
+   * Set a new variable storage object
+   * This must simply contain a 'get(name)' and 'set(name, value)' function
+   *
+   * Calling this function will clear any existing variable's values
+   */
+  setVariableStorage(storage) {
+    if (typeof storage.set !== 'function' || typeof storage.get !== 'function') {
+      throw new Error('Variable Storage object must contain both a "set" and "get" function');
+    }
+
+    this.variables = storage;
   }
 
   /**
@@ -52,6 +69,7 @@ class Runner {
     for (const node of nodes) {
       if (selectableNodes !== null && node.selectable) {
         // We're accumulating selection nodes, so add this one to the list
+        // TODO: handle conditional option nodes
         selectableNodes.push(node);
         // This is not a selectable node, so yield the options first
       } else {
@@ -70,8 +88,11 @@ class Runner {
             // Just text to be returned
             yield new results.TextResult(node.text);
           }
-        } else {
-          // TODO: evaluate assignments, conditionals, and commands
+        } else if (node instanceof nodeTypes.Assignment) {
+          this.evaluateAssignment(node);
+        } else if (node.conditional instanceof nodeTypes.Conditional) {
+          // Run the results of the conditional
+          yield* this.evalNodes(this.evaluateConditional(node));
         }
       }
     }
@@ -100,6 +121,79 @@ class Runner {
         // Run the new node
         yield* this.run(selectedOption.identifier);
       }
+    }
+  }
+
+  /**
+   * Evaluates the given assignment node
+   */
+  evaluateAssignment(node) {
+    let result = this.evaluateExpressionOrLiteral(node.expression);
+    const currentVal = this.variables.get(node.variableName);
+
+    if (node.type === 'SetVariableAddNode') {
+      result += currentVal;
+    } else if (node.type === 'SetVariableMinusNode') {
+      result -= currentVal;
+    } else if (node.type === 'SetVariableMultiplyNode') {
+      result *= currentVal;
+    } else if (node.type === 'SetVariableDivideNode') {
+      result /= currentVal;
+    } else if (node.type === 'SetVariableEqualToNode') {
+      // Nothing to be done
+    } else {
+      throw new Error(`I don't recognize assignment type ${node.type}`);
+    }
+
+    this.variables.set(node.variableName, result);
+  }
+
+  /**
+   * Evaluates the given conditional node
+   * Returns the statements to be run as a result of it (if any)
+   */
+  evaluateConditional(node) {
+
+  }
+
+  /**
+   * Evaluates an expression or literal down to its final value
+   */
+  evaluateExpressionOrLiteral(node) {
+    if (node instanceof nodeTypes.Expression) {
+      if (node.type === 'UnaryMinusExpressionNode') {
+        return -1 * this.evaluateExpressionOrLiteral(node.expression);
+      } else if (node.type === 'ArithmeticExpressionNode') {
+        return this.evaluateExpressionOrLiteral(node.expression);
+      } else if (node.type === 'ArithmeticExpressionAddNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) +
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'ArithmeticExpressionMinusNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) -
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'ArithmeticExpressionMultiplyNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) *
+               this.evaluateExpressionOrLiteral(node.expression2);
+      } else if (node.type === 'ArithmeticExpressionDivideNode') {
+        return this.evaluateExpressionOrLiteral(node.expression1) /
+               this.evaluateExpressionOrLiteral(node.expression2);
+      }
+
+      throw new Error(`I don't recognize expression type ${node.type}`);
+    } else if (node instanceof nodeTypes.Literal) {
+      if (node.type === 'NumericLiteralNode') {
+        return parseFloat(node.numericLiteral);
+      } else if (node.type === 'StringLiteralNode') {
+        return node.stringLiteral;
+      } else if (node.type === 'BooleanLiteralNode') {
+        return node.booleanLiteral === 'true';
+      } else if (node.type === 'VariableNode') {
+        return this.variables.get(node.variableName);
+      }
+
+      throw new Error(`I don't recognize literal type ${node.type}`);
+    } else {
+      throw new Error(`I don't recognize expression/literal type ${node.type}`);
     }
   }
 }

@@ -14,6 +14,7 @@ describe('Dialogue', () => {
   let threeNodeYarnData;
   let namedLinkYarnData;
   let shortcutsYarnData;
+  let assignmentYarnData;
 
   let runner;
 
@@ -22,6 +23,7 @@ describe('Dialogue', () => {
     threeNodeYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/threenodes.json'));
     namedLinkYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/namedlink.json'));
     shortcutsYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/shortcuts.json'));
+    assignmentYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/assignment.json'));
   });
 
   beforeEach(() => {
@@ -90,6 +92,7 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is after both options'));
     expect(run.next().done).to.be.true;
   });
+
   it('Can run through nested shortcuts', () => {
     runner.load(shortcutsYarnData);
     const run = runner.run('Nested');
@@ -109,6 +112,113 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('NestedText2'));
 
     expect(run.next().value).to.deep.equal(new bondage.TextResult('more text'));
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can evaluate a numeric assignment', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('Numeric');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('testvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('testvar')).to.equal(-123.4);
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can evaluate a numeric assignment with an expression', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('NumericExpression');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('testvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('testvar')).to.equal(((1 + 2) * -3) + 4.3);
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can evaluate an string assignment', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('String');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('testvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('testvar')).to.equal('Variable String');
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can evaluate a string assignment with an expression', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('StringExpression');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('testvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('testvar')).to.equal('Variable String Appended');
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can evaluate a boolean assignment', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('Boolean');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('testvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('testvar')).to.equal(true);
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can evaluate an assignment from one variable to another', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('Variable');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('firstvar')).to.be.undefined;
+    expect(runner.variables.get('secondvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('secondvar')).to.equal('First variable string');
+
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Can evaluate an assignment from one variable to another via an expression', () => {
+    runner.load(assignmentYarnData);
+    const run = runner.run('VariableExpression');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line'));
+
+    expect(runner.variables.get('firstvar')).to.be.undefined;
+    expect(runner.variables.get('secondvar')).to.be.undefined;
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Test Line After'));
+
+    expect(runner.variables.get('secondvar')).to.equal(-4.3 + 100);
+
     expect(run.next().done).to.be.true;
   });
 });

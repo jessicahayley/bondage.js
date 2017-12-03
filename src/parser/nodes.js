@@ -1,11 +1,27 @@
 'use strict';
 
-// A 'text' attribute on any node indicates text that is to be displayed
-//  to the user
-// If a node with a 'text' attribute has a 'selectable' attribute set to true
-//  it will be presented to the user as an option
+// Magic properties:
+// * text: indicates text that is to be displayed to the user
+// * selectable: if true, present it as an option to the user (requires text property)
+// TODO: just use inheritance and instanceof for this
+
+class Text { }
+class Selectable { }
+class Conditional { }
+class Assignment { }
+class Literal { }
+class Expression { }
 
 module.exports = {
+  types: {
+    Text,
+    Selectable,
+    Conditional,
+    Assignment,
+    Literal,
+    Expression,
+  },
+
   RootNode: class {
     constructor(dialogNodes) {
       this.name = 'RootNode';
@@ -26,16 +42,16 @@ module.exports = {
   DialogOptionNode: class {
     constructor(text, content) {
       this.type = 'DialogOptionNode';
-      this.selectable = true;
       this.text = text;
       this.content = content;
+
+      this.selectable = true;
     }
   },
 
   ConditionalDialogOptionNode: class {
     constructor(text, content, conditionalExpression) {
       this.type = 'ConditionalDialogOptionNode';
-      this.selectable = true;
       this.text = text;
       this.content = content;
       this.conditionalExpression = conditionalExpression;
@@ -87,74 +103,84 @@ module.exports = {
   LinkNode: class {
     constructor(text, identifier) {
       this.type = 'LinkNode';
-      this.selectable = true;
       this.text = text || null;
       this.identifier = identifier || this.text; // [[Destination Text]]
+
+      this.selectable = true;
     }
   },
 
   // /////////////// Literal Nodes
-  NumericLiteralNode: class {
+  NumericLiteralNode: class extends Literal {
     constructor(numericLiteral) {
+      super();
       this.type = 'NumericLiteralNode';
-      this.literal = numericLiteral;
+      this.numericLiteral = numericLiteral;
     }
   },
 
-  StringLiteralNode: class {
+  StringLiteralNode: class extends Literal {
     constructor(stringLiteral) {
+      super();
       this.type = 'StringLiteralNode';
       this.stringLiteral = stringLiteral;
     }
   },
 
-  BooleanLiteralNode: class {
+  BooleanLiteralNode: class extends Literal {
     constructor(booleanLiteral) {
+      super();
       this.type = 'BooleanLiteralNode';
       this.booleanLiteral = booleanLiteral;
     }
   },
 
-  VariableNode: class {
+  VariableNode: class extends Literal {
     constructor(variableName) {
+      super();
       this.type = 'VariableNode';
       this.variableName = variableName;
     }
   },
 
   // /////////////// Arithmetic Expression Nodes
-  UnaryMinusExpressionNode: class {
+  UnaryMinusExpressionNode: class extends Expression {
     constructor(expression) {
+      super();
       this.type = 'UnaryMinusExpressionNode';
       this.expression = expression;
     }
   },
 
-  ArithmeticExpressionNode: class {
+  ArithmeticExpressionNode: class extends Expression {
     constructor(expression) {
+      super();
       this.type = 'ArithmeticExpressionNode';
       this.expression = expression;
     }
   },
 
-  ArithmeticExpressionAddNode: class {
+  ArithmeticExpressionAddNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'ArithmeticExpressionAddNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  ArithmeticExpressionMinusNode: class {
+  ArithmeticExpressionMinusNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'ArithmeticExpressionMinusNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
     }
   },
 
-  ArithmeticExpressionMultiplyNode: class {
+  ArithmeticExpressionMultiplyNode: class extends Expression {
     constructor(expression1, expression2) {
+      super();
       this.type = 'ArithmeticExpressionMultiplyNode';
       this.expression1 = expression1;
       this.expression2 = expression2;
@@ -259,40 +285,45 @@ module.exports = {
 
   // /////////////// Assignment Expression Nodes
 
-  SetVariableEqualToNode: class {
+  SetVariableEqualToNode: class extends Assignment {
     constructor(variableName, expression) {
+      super();
       this.type = 'SetVariableEqualToNode';
       this.variableName = variableName;
       this.expression = expression;
     }
   },
 
-  SetVariableAddNode: class {
+  SetVariableAddNode: class extends Assignment {
     constructor(variableName, expression) {
+      super();
       this.type = 'SetVariableAddNode';
       this.variableName = variableName;
       this.expression = expression;
     }
   },
 
-  SetVariableMinusNode: class {
+  SetVariableMinusNode: class extends Assignment {
     constructor(variableName, expression) {
+      super();
       this.type = 'SetVariableMinusNode';
       this.variableName = variableName;
       this.expression = expression;
     }
   },
 
-  SetVariableMultipyNode: class {
+  SetVariableMultipyNode: class extends Assignment {
     constructor(variableName, expression) {
+      super();
       this.type = 'SetVariableMultipyNode';
       this.variableName = variableName;
       this.expression = expression;
     }
   },
 
-  SetVariableDivideNode: class {
+  SetVariableDivideNode: class extends Assignment {
     constructor(variableName, expression) {
+      super();
       this.type = 'SetVariableDivideNode';
       this.variableName = variableName;
       this.expression = expression;
