@@ -18,5 +18,15 @@
 			"y": 252
 		},
 		"colorID": 0
+	},
+	{
+		"title": "Conditional",
+		"tags": "Tag",
+		"body": "This is a test line\n-> Option 1\n\tThis is the first option\n-> Option 2 <<if 1 == 0>>\n\tThis is the second option\n-> Option 3\n\tThis is the third option\nThis is after both options",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
 	}
 ]

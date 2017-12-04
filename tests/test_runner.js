@@ -144,6 +144,22 @@ describe('Dialogue', () => {
     expect(run.next().done).to.be.true;
   });
 
+  it('Can exclude a conditional shortcut', () => {
+    runner.load(shortcutsYarnData);
+    const run = runner.run('Conditional');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
+
+    const optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option 1', 'Option 3']));
+
+    optionResult.select(1);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is the third option'));
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is after both options'));
+    expect(run.next().done).to.be.true;
+  });
+
   it('Can evaluate a numeric assignment', () => {
     runner.load(assignmentYarnData);
     const run = runner.run('Numeric');

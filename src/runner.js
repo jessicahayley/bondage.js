@@ -90,11 +90,11 @@ class Runner {
           // Just text to be returned
           yield new results.TextResult(node.text);
         } else if (node instanceof nodeTypes.Link) {
-          // Some sort of selectable node, so start accumulating them
+          // Start accumulating link nodes
           selectionType = nodeTypes.Link;
           selectableNodes = [node];
         } else if (node instanceof nodeTypes.Shortcut) {
-          // Some sort of selectable node, so start accumulating them
+          // Start accumulating shortcut nodes
           selectionType = nodeTypes.Shortcut;
           selectableNodes = [node];
         } else if (node instanceof nodeTypes.Assignment) {
@@ -120,12 +120,29 @@ class Runner {
     if (selections.length > 1 || selections[0] instanceof nodeTypes.Shortcut) {
       // Multiple options to choose from (or just a single shortcut)
 
-      const optionResults = new results.OptionsResult(selections.map((s) => { return s.text; }));
+      // Filter out any conditional dialog options that result to false
+      const filteredSelections = selections.filter((s) => {
+        if (s.type === 'ConditionalDialogOptionNode') {
+          return this.evaluateExpressionOrLiteral(s.conditionalExpression);
+        }
+
+        return true;
+      });
+
+      if (filteredSelections.length === 0) {
+        // No options to choose anymore
+        return;
+      }
+
+      const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
+        return s.text;
+      }));
+
       yield optionResults;
 
       if (optionResults.selected !== -1) {
         // Something was selected
-        const selectedOption = selections[optionResults.selected];
+        const selectedOption = filteredSelections[optionResults.selected];
         if (selectedOption.content) {
           // Recursively go through the nodes nested within
           yield* this.evalNodes(selectedOption.content);
