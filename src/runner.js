@@ -9,6 +9,7 @@ class Runner {
   constructor() {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
+    this.commandHandler = null;
   }
 
   /**
@@ -36,6 +37,19 @@ class Runner {
     }
 
     this.variables = storage;
+  }
+
+  /**
+   * Set the function to be called whenever a command is given
+   * Should accept a single string as a parameter
+   * @param {function} handler
+   */
+  setCommandHandler(handler) {
+    if (typeof handler !== 'function') {
+      throw new Error('Command handler must be a function');
+    }
+
+    this.commandHandler = handler;
   }
 
   /**
@@ -102,6 +116,15 @@ class Runner {
         } else if (node instanceof nodeTypes.Conditional) {
           // Run the results of the conditional
           yield* this.evalNodes(this.evaluateConditional(node));
+        } else if (node instanceof nodeTypes.Command) {
+          if (node.command === 'stop') {
+            // Special command, halt execution
+            return;
+          }
+
+          if (this.commandHandler) {
+            this.commandHandler(node.command);
+          }
         }
       }
     }

@@ -1,0 +1,22 @@
+[
+	{
+		"title": "BasicCommands",
+		"tags": "Tag",
+		"body": "<<command1>>text in between commands<<command with space>>",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "StopCommand",
+		"tags": "Tag",
+		"body": "First line\n<<stop>>\nThis shouldn't show",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	}
+]

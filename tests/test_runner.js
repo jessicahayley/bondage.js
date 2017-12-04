@@ -14,6 +14,7 @@ describe('Dialogue', () => {
   let shortcutsYarnData;
   let assignmentYarnData;
   let conditionalYarnData;
+  let commandAndFunctionYarnData;
 
   let runner;
 
@@ -22,6 +23,7 @@ describe('Dialogue', () => {
     shortcutsYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/shortcuts.json'));
     assignmentYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/assignment.json'));
     conditionalYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/conditions.json'));
+    commandAndFunctionYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/commandsandfunctions.json'));
   });
 
   beforeEach(() => {
@@ -324,5 +326,29 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('Text after'));
 
     expect(run.next().done).to.be.true;
+  });
+
+  it('Halts when given the <<stop>> command', () => {
+    runner.load(commandAndFunctionYarnData);
+    const run = runner.run('StopCommand');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('First line'));
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Returns a command to the user', () => {
+    runner.load(commandAndFunctionYarnData);
+    const run = runner.run('BasicCommands');
+
+    let lastCommand = '';
+    runner.setCommandHandler((command) => {
+      lastCommand = command;
+    });
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('text in between commands'));
+    expect(lastCommand).to.equal('command1');
+
+    expect(run.next().done).to.be.true;
+    expect(lastCommand).to.equal('command with space');
   });
 });

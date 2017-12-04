@@ -109,9 +109,11 @@ const grammar = {
     ],
 
     command: [
-      // TODO: not sure why this breaks without also specifying identifiers
       ['BeginCommand Identifier EndCommand', '$$ = new yy.CommandNode($2);'],
-      ['BeginCommand Text EndCommand', '$$ = new yy.CommandNode($2);'],
+
+      // Extremely ugly hack because a command with spaces (e.g. <<foo bar>>)
+      // Lexes as BeginCommand Identifier Text EndCommand
+      ['BeginCommand Identifier Text EndCommand', '$$ = new yy.CommandNode($2 + " " + $3);'],
     ],
 
     arguments: [

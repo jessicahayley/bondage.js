@@ -7,6 +7,7 @@ class Conditional { }
 class Assignment { }
 class Literal { }
 class Expression { }
+class Command { }
 
 module.exports = {
   types: {
@@ -17,6 +18,7 @@ module.exports = {
     Assignment,
     Literal,
     Expression,
+    Command,
   },
 
   RootNode: class {
@@ -346,16 +348,18 @@ module.exports = {
 
   // /////////////// Function Nodes
 
-  FunctionResultNode: class {
+  FunctionResultNode: class extends Literal {
     constructor(functionName, args) {
+      super();
       this.type = 'FunctionResultNode';
       this.functionName = functionName;
       this.args = args;
     }
   },
 
-  CommandNode: class {
+  CommandNode: class extends Command {
     constructor(command) {
+      super();
       this.type = 'CommandNode';
       this.command = command;
     }
