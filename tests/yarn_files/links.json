@@ -48,5 +48,25 @@
 			"y": 404
 		},
 		"colorID": 0
+	},
+	{
+		"title": "OneLinkPassthrough",
+		"tags": "",
+		"body": "First test line\n[[Option1]]",
+		"position": {
+			"x": 774,
+			"y": 404
+		},
+		"colorID": 0
+	},
+	{
+		"title": "LinkAfterShortcuts",
+		"tags": "",
+		"body": "First test line\n-> Shortcut 1\n\tThis is the first shortcut\n-> Shortcut 2\n\tThis is the second shortcut\n[[First link|Option1]][[Second link|Option2]]",
+		"position": {
+			"x": 774,
+			"y": 404
+		},
+		"colorID": 0
 	}
 ]

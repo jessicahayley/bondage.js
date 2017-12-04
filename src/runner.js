@@ -64,11 +64,15 @@ class Runner {
 
     let selectableNodes = null;
 
+    // Either nodeTypes.Link or nodeTypes.Shortcut depending on which we're accumulating
+    // (Since we don't want to accidentally lump shortcuts in with links)
+    let selectionType = null;
+
     // Yield the individual user-visible results
     // Need to accumulate all adjacent selectables into one list (hence some of
     //  the weirdness here)
     for (const node of nodes) {
-      if (selectableNodes !== null && node instanceof nodeTypes.Selectable) {
+      if (selectableNodes !== null && node instanceof selectionType) {
         // We're accumulating selection nodes, so add this one to the list
         // TODO: handle conditional option nodes
         selectableNodes.push(node);
@@ -79,13 +83,19 @@ class Runner {
           // Need to yield the accumulated selections first
           yield* this.handleSelections(selectableNodes);
           selectableNodes = null;
+          selectionType = null;
         }
 
         if (node instanceof nodeTypes.Text) {
           // Just text to be returned
           yield new results.TextResult(node.text);
-        } else if (node instanceof nodeTypes.Selectable) {
+        } else if (node instanceof nodeTypes.Link) {
           // Some sort of selectable node, so start accumulating them
+          selectionType = nodeTypes.Link;
+          selectableNodes = [node];
+        } else if (node instanceof nodeTypes.Shortcut) {
+          // Some sort of selectable node, so start accumulating them
+          selectionType = nodeTypes.Shortcut;
           selectableNodes = [node];
         } else if (node instanceof nodeTypes.Assignment) {
           this.evaluateAssignment(node);
@@ -107,19 +117,26 @@ class Runner {
    * @param {any[]} selections
    */
   * handleSelections(selections) {
-    const optionResults = new results.OptionsResult(selections.map((s) => { return s.text; }));
-    yield optionResults;
+    if (selections.length > 1 || selections[0] instanceof nodeTypes.Shortcut) {
+      // Multiple options to choose from (or just a single shortcut)
 
-    if (optionResults.selected !== -1) {
-      // Something was selected
-      const selectedOption = selections[optionResults.selected];
-      if (selectedOption.content) {
-        // Recursively go through the nodes nested within
-        yield* this.evalNodes(selectedOption.content);
-      } else if (selectedOption.identifier) {
-        // Run the new node
-        yield* this.run(selectedOption.identifier);
+      const optionResults = new results.OptionsResult(selections.map((s) => { return s.text; }));
+      yield optionResults;
+
+      if (optionResults.selected !== -1) {
+        // Something was selected
+        const selectedOption = selections[optionResults.selected];
+        if (selectedOption.content) {
+          // Recursively go through the nodes nested within
+          yield* this.evalNodes(selectedOption.content);
+        } else if (selectedOption.identifier) {
+          // Run the new node
+          yield* this.run(selectedOption.identifier);
+        }
       }
+    } else {
+      // If there's only one link option, automatically go to it
+      yield* this.run(selections[0].identifier);
     }
   }
 

@@ -76,6 +76,36 @@ describe('Dialogue', () => {
     expect(run.next().done).to.be.true;
   });
 
+  it('Automatically goes to the linked node, if only one link is given', () => {
+    runner.load(linksYarnData);
+    const run = runner.run('OneLinkPassthrough');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('First test line'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line'));
+    expect(run.next().done).to.be.true;
+  });
+
+  it('Does not group together link and shortcut options', () => {
+    runner.load(linksYarnData);
+    const run = runner.run('LinkAfterShortcuts');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('First test line'));
+
+    let optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Shortcut 1', 'Shortcut 2']));
+
+    optionResult.select(1);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is the second shortcut'));
+
+    optionResult = run.next().value;
+    expect(optionResult).to.deep.equal(new bondage.OptionResult(['First link', 'Second link']));
+
+    optionResult.select(0);
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line'));
+
+    expect(run.next().done).to.be.true;
+  });
+
   it('Can run through shortcuts', () => {
     runner.load(shortcutsYarnData);
     const run = runner.run('NonNested');

@@ -1,7 +1,8 @@
 'use strict';
 
 class Text { }
-class Selectable { }
+class Shortcut { }
+class Link { }
 class Conditional { }
 class Assignment { }
 class Literal { }
@@ -10,7 +11,8 @@ class Expression { }
 module.exports = {
   types: {
     Text,
-    Selectable,
+    Shortcut,
+    Link,
     Conditional,
     Assignment,
     Literal,
@@ -34,7 +36,7 @@ module.exports = {
     }
   },
 
-  DialogOptionNode: class extends Selectable {
+  DialogOptionNode: class extends Shortcut {
     constructor(text, content) {
       super();
       this.type = 'DialogOptionNode';
@@ -43,7 +45,7 @@ module.exports = {
     }
   },
 
-  ConditionalDialogOptionNode: class extends Selectable {
+  ConditionalDialogOptionNode: class extends Shortcut {
     constructor(text, content, conditionalExpression) {
       super();
       this.type = 'ConditionalDialogOptionNode';
@@ -100,7 +102,7 @@ module.exports = {
     }
   },
 
-  LinkNode: class extends Selectable {
+  LinkNode: class extends Link {
     constructor(text, identifier) {
       super();
       this.type = 'LinkNode';
