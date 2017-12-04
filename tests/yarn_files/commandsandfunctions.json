@@ -28,5 +28,25 @@
 			"y": 252
 		},
 		"colorID": 0
+	},
+	{
+		"title": "VisitedFunction",
+		"tags": "Tag",
+		"body": "<<if visited(\"VisitedFunctionStart\")>>you have visited VisitedFunctionStart!<<endif>><<if visited(\"SomeOtherNode\")>>You have not visited SomeOtherNode!<<endif>>",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "VisitedFunctionStart",
+		"tags": "Tag",
+		"body": "Hello[[VisitedFunction]]",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
 	}
 ]

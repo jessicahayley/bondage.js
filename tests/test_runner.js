@@ -375,4 +375,14 @@ describe('Dialogue', () => {
 
     expect(run.next().done).to.be.true;
   });
+
+  it('Returns a command to the user', () => {
+    runner.load(commandAndFunctionYarnData);
+    const run = runner.run('VisitedFunctionStart');
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('Hello'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('you have visited VisitedFunctionStart!'));
+
+    expect(run.next().done).to.be.true;
+  });
 });
