@@ -14,7 +14,7 @@ Use at your own risk!
 
 # Usage
 
-#### As a Web Tool
+#### As a Web Tool (not up to date right now sorry [#23](https://github.com/jhayley/bondage.js/issues/23))
 
 To run through your yarn files in your browser, go to http://hayley.zone/bondage.js, paste your yarn data in the field, then hit "compile".
 
@@ -28,12 +28,12 @@ Now you can use the `bondage` command to run through Yarn files from the command
 * Running a single file from the default start node (named "Start"): `bondage run yarnfile.json`
 * Running a single file from the specified node name: `bondage run -s StartNode yarnfile.json`
 * Running multiple files from the specified node name: `bondage run -s StartNode yarnfile1.json yarnfile2.json ...`
-* See the compiled ast: `bondage run --ast yarnfile.json`
-* See the tokenized input: `bondage run --tokens yarnfile.json`
+* See the compiled ast: `bondage compile --ast yarnfile.json`
+* See the tokenized input: `bondage compile --tokens yarnfile.json`
 
 #### As a Library
 
-**Web**
+**Web** (not up to date right now sorry [#23](https://github.com/jhayley/bondage.js/issues/23))
 
 Include [dist/bondage.min.js](https://github.com/jhayley/bondage.js/blob/master/dist/bondage.min.js) somewhere in your html, and the `bondage` variable will be added to the global scope. You can then access everything in the example below (such as `bondage.Dialogue`) through that variable.
 
@@ -50,6 +50,16 @@ const yarnData = JSON.parse(fs.readFileSync('yarnFile.json'));
 
 runner.load(yarnData);
 
+runner.setCommandHandler((command) => {
+  // Called whenever there is a <<command>>, the parameter being the text inside
+});
+
+// Register a function to be called from the dialog
+runner.registerFunction('isEven', (args) => {
+  // Used as <<if isEven($var)>>It is even<<endif>>
+  return args[0] % 2;
+});
+
 // Loop over the dialogue from the node titled 'Start'
 for (const result of runner.run('Start')) {
   // Do something else with the result
@@ -59,7 +69,7 @@ for (const result of runner.run('Start')) {
     // This works for both links between nodes and shortcut options
     console.log(result.options);
 
-    // Select based on the option's index in the array
+    // Select based on the option's index in the array (if you don't select an option, the dialog will continue past them)
     result.select(1);
   }
 }
@@ -70,3 +80,5 @@ let result = d.next().value;
 let nextResult = d.next().value;
 // And so on
 ```
+
+For usage of the yarn format itself, please see the [YarnSpinner Documentation](https://github.com/thesecretlab/YarnSpinner/tree/master/Documentation), everything there should carry here too (if something does not match up, please open an issue).
