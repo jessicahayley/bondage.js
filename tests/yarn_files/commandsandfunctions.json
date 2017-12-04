@@ -18,5 +18,15 @@
 			"y": 252
 		},
 		"colorID": 0
+	},
+	{
+		"title": "FunctionConditional",
+		"tags": "Tag",
+		"body": "First line\n<<if testfunc(\"firstarg\")>>This shouldn't show<<elseif testfunc(\"firstarg\", \"secondarg\")>>This should show<<endif>>After both",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
 	}
 ]

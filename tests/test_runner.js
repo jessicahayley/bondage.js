@@ -351,4 +351,28 @@ describe('Dialogue', () => {
     expect(run.next().done).to.be.true;
     expect(lastCommand).to.equal('command with space');
   });
+
+  it('Evaluates a function and uses it in a conditional', () => {
+    runner.load(commandAndFunctionYarnData);
+    const run = runner.run('FunctionConditional');
+
+    runner.registerFunction('testfunc', (args) => {
+      if (args[0] === 'firstarg') {
+        if (args[1] === 'secondarg') {
+          // Test returning true
+          return true;
+        }
+        // Test returning false
+        return false;
+      }
+
+      throw new Error(`Args ${args} were not expected in testfunc`);
+    });
+
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('First line'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('This should show'));
+    expect(run.next().value).to.deep.equal(new bondage.TextResult('After both'));
+
+    expect(run.next().done).to.be.true;
+  });
 });

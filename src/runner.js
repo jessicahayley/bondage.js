@@ -10,6 +10,7 @@ class Runner {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
     this.commandHandler = null;
+    this.functions = {};
   }
 
   /**
@@ -50,6 +51,14 @@ class Runner {
     }
 
     this.commandHandler = handler;
+  }
+
+  registerFunction(name, func) {
+    if (typeof func !== 'function') {
+      throw new Error('Registered function must be...well...a function');
+    }
+
+    this.functions[name] = func;
   }
 
   /**
@@ -292,6 +301,12 @@ class Runner {
         return node.booleanLiteral === 'true';
       } else if (node.type === 'VariableNode') {
         return this.variables.get(node.variableName);
+      } else if (node.type === 'FunctionResultNode') {
+        if (this.functions[node.functionName]) {
+          return this.functions[node.functionName](node.args.map(this.evaluateExpressionOrLiteral));
+        }
+
+        throw new Error(`Function "${node.functionName}" not found`);
       }
 
       throw new Error(`I don't recognize literal type ${node.type}`);
