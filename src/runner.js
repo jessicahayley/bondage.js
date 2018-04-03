@@ -326,5 +326,5 @@ class Runner {
 module.exports = {
   Runner,
   TextResult: results.TextResult,
-  OptionResult: results.OptionsResult,
+  OptionsResult: results.OptionsResult,
 };
