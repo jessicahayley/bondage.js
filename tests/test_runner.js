@@ -54,7 +54,7 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is another test line'));
 
     const optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option1', 'Option2']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Option1', 'Option2']));
 
     optionResult.select(0);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line'));
@@ -70,7 +70,7 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is another test line'));
 
     const optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['First choice', 'Second choice']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['First choice', 'Second choice']));
 
     optionResult.select(1);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line'));
@@ -94,13 +94,13 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('First test line'));
 
     let optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Shortcut 1', 'Shortcut 2']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Shortcut 1', 'Shortcut 2']));
 
     optionResult.select(1);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is the second shortcut'));
 
     optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['First link', 'Second link']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['First link', 'Second link']));
 
     optionResult.select(0);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line'));
@@ -115,7 +115,7 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
 
     const optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option 1', 'Option 2']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Option 1', 'Option 2']));
 
     optionResult.select(1);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is the second option'));
@@ -131,13 +131,13 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('text'));
 
     let optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['shortcut1', 'shortcut2']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['shortcut1', 'shortcut2']));
 
     optionResult.select(0);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('Text1'));
 
     optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['nestedshortcut1', 'nestedshortcut2']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['nestedshortcut1', 'nestedshortcut2']));
 
     optionResult.select(1);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('NestedText2'));
@@ -153,7 +153,7 @@ describe('Dialogue', () => {
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is a test line'));
 
     const optionResult = run.next().value;
-    expect(optionResult).to.deep.equal(new bondage.OptionResult(['Option 1', 'Option 3']));
+    expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Option 1', 'Option 3']));
 
     optionResult.select(1);
     expect(run.next().value).to.deep.equal(new bondage.TextResult('This is the third option'));
