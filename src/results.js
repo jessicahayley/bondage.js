@@ -13,14 +13,15 @@ class TextResult extends Result {
   }
 }
 
-class CommandResult extends Result { ///NEW
+class jsEvalResult extends Result { ///NEW
   /**
    * Return commands in the node
-   * @param {string} [command] return commands from node
+   * @param {any[]} [node] array of text to be displayed
    */
-  constructor(command) {
+  constructor(node) {
     super();
-    this.command = command;
+    this.functionName = node.functionName;
+    this.args = node.args;
   }
 }
 
@@ -43,4 +44,4 @@ class OptionsResult extends Result {
   }
 }
 
-module.exports = { Result, TextResult, OptionsResult,  CommandResult};
+module.exports = { Result, TextResult, OptionsResult,  jsEvalResult};
