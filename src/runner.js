@@ -72,13 +72,13 @@ class Runner {
   */
   * run(startNode) {
     const yarnNode = this.yarnNodes[startNode];
-
+    
     if (yarnNode === undefined) {
       throw new Error(`Node "${startNode}" does not exist`);
     }
-
+    
     this.visited[startNode] = true;
-
+    
     // Parse the entire node
     const parserNodes = Array.from(parser.parse(yarnNode.body));
     yield* this.evalNodes(parserNodes);
@@ -137,11 +137,17 @@ class Runner {
             // Special command, halt execution
             return;
           }
-          yield new results.CommandResult(node.command);
+          
+          // yield new results.CommandResult(node.command);
 
           if (this.commandHandler) {
             this.commandHandler(node.command);
           }
+        }
+        
+        else if (node.type == "jsEvalNode"){
+          yield new results.jsEvalResult(node);
+          console.log(node)
         }
       }
     }
@@ -308,7 +314,7 @@ class Runner {
         return node.booleanLiteral === 'true';
       } else if (node.type === 'VariableNode') {
         return this.variables.get(node.variableName);
-      } else if (node.type === 'FunctionResultNode') {
+      } else if (node.type === 'FunctionResultNode') {  
         if (this.functions[node.functionName]) {
           return this.functions[node.functionName](node.args.map(this.evaluateExpressionOrLiteral));
         }
