@@ -16,7 +16,7 @@ class TextResult extends Result {
 class CommandResult extends Result { ///NEW
   /**
    * Return commands in the node
-   * @param {string} [command] array of text to be displayed
+   * @param {string} [command] return commands from node
    */
   constructor(command) {
     super();
