@@ -13,6 +13,17 @@ class TextResult extends Result {
   }
 }
 
+class CommandResult extends Result { ///NEW
+  /**
+   * Return commands in the node
+   * @param {string} [command] array of text to be displayed
+   */
+  constructor(command) {
+    super();
+    this.command = command;
+  }
+}
+
 class OptionsResult extends Result {
   /**
    * Create a selectable list of options from the given list of text
@@ -32,4 +43,4 @@ class OptionsResult extends Result {
   }
 }
 
-module.exports = { Result, TextResult, OptionsResult };
+module.exports = { Result, TextResult, OptionsResult,  CommandResult};
