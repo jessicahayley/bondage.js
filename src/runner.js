@@ -137,6 +137,7 @@ class Runner {
             // Special command, halt execution
             return;
           }
+          yield new results.CommandResult(node.command);
 
           if (this.commandHandler) {
             this.commandHandler(node.command);
@@ -176,7 +177,6 @@ class Runner {
       const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
         return s.text;
       }));
-
       yield optionResults;
 
       if (optionResults.selected !== -1) {
@@ -327,4 +327,5 @@ module.exports = {
   Runner,
   TextResult: results.TextResult,
   OptionsResult: results.OptionsResult,
+  CommandResult: results.CommandResult
 };
