@@ -13,6 +13,19 @@ class TextResult extends Result {
   }
 }
 
+class jsEvalResult extends Result { ///NEW
+  /**
+   * Return commands in the node
+   * @param {any[]} [node] array of text to be displayed
+   */
+  constructor(node) {
+    super();
+    this.functionName = node.functionName;
+    this.args = node.args;
+    this.evalString = node.evalString;
+  }
+}
+
 class OptionsResult extends Result {
   /**
    * Create a selectable list of options from the given list of text
@@ -32,4 +45,4 @@ class OptionsResult extends Result {
   }
 }
 
-module.exports = { Result, TextResult, OptionsResult };
+module.exports = { Result, TextResult, OptionsResult,  jsEvalResult};

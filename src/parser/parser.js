@@ -114,6 +114,10 @@ const grammar = {
       // Extremely ugly hack because a command with spaces (e.g. <<foo bar>>)
       // Lexes as BeginCommand Identifier Text EndCommand
       ['BeginCommand Identifier Text EndCommand', '$$ = new yy.CommandNode($2 + " " + $3);'],
+
+      //// This enables the ability to run pure JS
+      ['BeginCommand Identifier LeftParen RightParen EndCommand', '$$ = new yy.jsEvalNode($2);'], /// <<myfunction()>>
+      ['BeginCommand Identifier LeftParen arguments RightParen EndCommand', '$$ = new yy.jsEvalNode($2,$4);'], /// <<myfunction(\"test\",True,22)>>
     ],
 
     arguments: [
@@ -124,6 +128,8 @@ const grammar = {
     argument: [
       ['Number', '$$ = new yy.NumericLiteralNode($1);'],
       ['String', '$$ = new yy.StringLiteralNode($1);'],
+      ['True', '$$ = new yy.BooleanLiteralNode($1);'],
+      ['False', '$$ = new yy.BooleanLiteralNode($1);'],
       ['Variable', '$$ = new yy.VariableNode($1.substring(1));'],
     ],
   },

@@ -120,7 +120,8 @@ module.exports = {
     constructor(numericLiteral) {
       super();
       this.type = 'NumericLiteralNode';
-      this.numericLiteral = numericLiteral;
+      this.numericLiteral = numericLiteral; /// kept for compatibility
+      this.value = eval(numericLiteral); /// added for consistency between Node's datastructure.. Is called .value in all
     }
   },
 
@@ -129,6 +130,7 @@ module.exports = {
       super();
       this.type = 'StringLiteralNode';
       this.stringLiteral = stringLiteral;
+      this.value = '"' + stringLiteral + '"';
     }
   },
 
@@ -137,6 +139,7 @@ module.exports = {
       super();
       this.type = 'BooleanLiteralNode';
       this.booleanLiteral = booleanLiteral;
+      this.value = eval(booleanLiteral);
     }
   },
 
@@ -145,6 +148,7 @@ module.exports = {
       super();
       this.type = 'VariableNode';
       this.variableName = variableName;
+      this.value = variableName;
     }
   },
 
@@ -354,6 +358,24 @@ module.exports = {
       this.type = 'FunctionResultNode';
       this.functionName = functionName;
       this.args = args;
+    }
+  },
+  
+  jsEvalNode: class extends Literal {
+    constructor(functionName, args) {
+      super();
+      this.type = 'jsEvalNode';
+      this.functionName = functionName;
+      this.args = args;
+      if (args.length === 0){
+        this.evalString = functionName + "()";
+      }else{
+        this.evalString = functionName + "("
+        args.forEach((parameter,i) => {
+          this.evalString += String(parameter.value);
+          if (i < args.length-1){ this.evalString += ","}
+        });this.evalString += ");"
+      }
     }
   },
 
