@@ -130,7 +130,7 @@ module.exports = {
       super();
       this.type = 'StringLiteralNode';
       this.stringLiteral = stringLiteral;
-      this.value = stringLiteral;
+      this.value = '"' + stringLiteral + '"';
     }
   },
 
@@ -367,6 +367,15 @@ module.exports = {
       this.type = 'jsEvalNode';
       this.functionName = functionName;
       this.args = args;
+      if (args.length === 0){
+        this.evalString = functionName + "()";
+      }else{
+        this.evalString = functionName + "("
+        args.forEach((parameter,i) => {
+          this.evalString += String(parameter.value);
+          if (i < args.length-1){ this.evalString += ","}
+        });this.evalString += ");"
+      }
     }
   },
 
