@@ -333,5 +333,5 @@ module.exports = {
   Runner,
   TextResult: results.TextResult,
   OptionsResult: results.OptionsResult,
-  CommandResult: results.CommandResult
+  jsEvalResult: results.jsEvalResult
 };
