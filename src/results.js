@@ -22,6 +22,7 @@ class jsEvalResult extends Result { ///NEW
     super();
     this.functionName = node.functionName;
     this.args = node.args;
+    this.evalString = node.evalString;
   }
 }
 
