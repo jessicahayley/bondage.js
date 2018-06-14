@@ -54,7 +54,7 @@ for (const result of runner.run('Start')) {
   // Do something else with the result
   if (result instanceof bondage.TextResult) {
     console.log(result.text);
-  } else   if (result instanceof bondage.CommandResult) { ///<--- You can also get <<commands>> during dialogue loop
+  } else if (result instanceof bondage.CommandResult) { ///<--- You can also get <<commands>> during dialogue loop
     console.log(result.text); 
   } else if (result instanceof bondage.OptionsResult) {
     // This works for both links between nodes and shortcut options
