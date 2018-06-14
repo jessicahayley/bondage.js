@@ -4,8 +4,8 @@
 		"tags": "Tag",
 		"body": "<<command1>>text in between commands<<command with space>>",
 		"position": {
-			"x": 449,
-			"y": 252
+			"x": 347,
+			"y": 510
 		},
 		"colorID": 0
 	},
@@ -14,8 +14,8 @@
 		"tags": "Tag",
 		"body": "First line\n<<stop>>\nThis shouldn't show",
 		"position": {
-			"x": 449,
-			"y": 252
+			"x": 372,
+			"y": 261
 		},
 		"colorID": 0
 	},
@@ -24,8 +24,8 @@
 		"tags": "Tag",
 		"body": "First line\n<<if testfunc(\"firstarg\")>>This shouldn't show<<elseif testfunc(\"firstarg\", \"secondarg\")>>This should show<<endif>>After both",
 		"position": {
-			"x": 449,
-			"y": 252
+			"x": 94,
+			"y": 394
 		},
 		"colorID": 0
 	},
@@ -34,8 +34,8 @@
 		"tags": "Tag",
 		"body": "<<if visited(\"VisitedFunctionStart\")>>you have visited VisitedFunctionStart!<<endif>><<if visited(\"SomeOtherNode\")>>You have not visited SomeOtherNode!<<endif>>",
 		"position": {
-			"x": 449,
-			"y": 252
+			"x": 517,
+			"y": -6
 		},
 		"colorID": 0
 	},
@@ -44,8 +44,18 @@
 		"tags": "Tag",
 		"body": "Hello[[VisitedFunction]]",
 		"position": {
-			"x": 449,
-			"y": 252
+			"x": 108,
+			"y": 92
+		},
+		"colorID": 0
+	},
+	{
+		"title": "JsFunctionCall",
+		"tags": "",
+		"body": "<<console.log(\"bondagejs rocks!\")>>\n<<alert(\"<3\")>>\n",
+		"position": {
+			"x": 676,
+			"y": 251
 		},
 		"colorID": 0
 	}

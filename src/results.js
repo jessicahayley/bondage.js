@@ -13,6 +13,18 @@ class TextResult extends Result {
   }
 }
 
+class CommandResult extends Result {
+  /**
+   * Create a text display result
+   * @param {string} [text] text to be displayed
+   */
+  constructor(text) {
+    super();
+    this.text = text;
+  }
+}
+
+
 class OptionsResult extends Result {
   /**
    * Create a selectable list of options from the given list of text
@@ -32,4 +44,4 @@ class OptionsResult extends Result {
   }
 }
 
-module.exports = { Result, TextResult, OptionsResult };
+module.exports = { Result, TextResult, OptionsResult, CommandResult };
