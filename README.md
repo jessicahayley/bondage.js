@@ -54,6 +54,8 @@ for (const result of runner.run('Start')) {
   // Do something else with the result
   if (result instanceof bondage.TextResult) {
     console.log(result.text);
+  } else   if (result instanceof bondage.CommandResult) { ///<--- You can also get <<commands>> during dialogue loop
+    console.log(result.text); 
   } else if (result instanceof bondage.OptionsResult) {
     // This works for both links between nodes and shortcut options
     console.log(result.options);
@@ -61,6 +63,7 @@ for (const result of runner.run('Start')) {
     // Select based on the option's index in the array (if you don't select an option, the dialog will continue past them)
     result.select(1);
   }
+  
 }
 
 // Advance the dialogue manually from the node titled 'Start'
