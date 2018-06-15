@@ -137,11 +137,11 @@ class Runner {
           if (node.command === 'stop') {
             // Special command, halt execution
             return;
-          }else{yield new results.CommandResult(node.value)};
-
+          }
           if (this.commandHandler) {
             this.commandHandler(node.command);
           }
+          yield new results.CommandResult(node.value);
         }
       }
     }
