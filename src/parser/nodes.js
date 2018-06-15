@@ -366,20 +366,20 @@ module.exports = {
       super();
       this.type = 'CommandNode';
       this.command = command;
-      this.text = command;
-      if (parameters === null) {
+      this.value = command;
+      if (parameters === null || parameters === undefined) {
         return;
       }
-      this.text += '(';
+      this.value += '(';
       if (parameters.length !== 0) {
         parameters.forEach((parameter, i) => {
-          this.text += parameter.value;
+          this.value += parameter.value;
           if (i < parameters.length - 1) {
-            this.text += ',';
+            this.value += ',';
           }
         });
       }
-      this.text += ')';
+      this.value += ')';
     }
   },
 };

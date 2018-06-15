@@ -20,7 +20,7 @@ class CommandResult extends Result {
    */
   constructor(text) {
     super();
-    this.text = text;
+    this.value = text;
   }
 }
 
