@@ -362,7 +362,7 @@ module.exports = {
   },
 
   CommandNode: class extends Command {
-    constructor(command, parameters = null) {
+    constructor(command, parameters) {
       super();
       this.type = 'CommandNode';
       this.command = command;

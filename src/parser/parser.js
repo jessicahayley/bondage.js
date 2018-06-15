@@ -109,11 +109,11 @@ const grammar = {
     ],
 
     command: [
-      ['BeginCommand Identifier EndCommand', '$$ = new yy.CommandNode($2);'], ///<<command>>
+      ['BeginCommand Identifier EndCommand', '$$ = new yy.CommandNode($2,null);'], ///<<command>>
 
       // Extremely ugly hack because a command with spaces (e.g. <<foo bar>>)
       // Lexes as BeginCommand Identifier Text EndCommand
-      ['BeginCommand Identifier Text EndCommand', '$$ = new yy.CommandNode($2 + " " + $3);'], ///<<command command>>
+      ['BeginCommand Identifier Text EndCommand', '$$ = new yy.CommandNode($2 + " " + $3,null);'], ///<<command command>>
        //// This enables the ability to pass JS function calls as a string
        ['BeginCommand Identifier LeftParen RightParen EndCommand', '$$ = new yy.CommandNode($2,[]);'], /// <<myfunction()>>
        ['BeginCommand Identifier LeftParen arguments RightParen EndCommand', '$$ = new yy.CommandNode($2,$4);'], /// <<myfunction("test",True,22)>>
