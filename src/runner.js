@@ -140,7 +140,7 @@ class Runner {
           }
           if (this.commandHandler) {
             this.commandHandler(node.command);
-            yield new results.CommandResult(node.value);
+            yield* new results.CommandResult(node.value);
           } 
         }
       }
