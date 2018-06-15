@@ -138,10 +138,10 @@ class Runner {
             // Special command, halt execution
             return;
           }
+          
           if (this.commandHandler) {
             this.commandHandler(node.command);
-            yield new results.CommandResult(node.value);
-          } 
+          }else{yield new results.CommandResult(node.value);}
         }
       }
     }
