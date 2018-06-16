@@ -121,7 +121,7 @@ module.exports = {
       super();
       this.type = 'NumericLiteralNode';
       this.numericLiteral = numericLiteral;
-      this.value = eval(numericLiteral);
+      this.value = numericLiteral;
     }
   },
 
@@ -139,7 +139,7 @@ module.exports = {
       super();
       this.type = 'BooleanLiteralNode';
       this.booleanLiteral = booleanLiteral;
-      this.value = eval(booleanLiteral);
+      this.value = booleanLiteral;
     }
   },
 
