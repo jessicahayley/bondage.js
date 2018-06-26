@@ -216,7 +216,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-  it('can pass commands with myCommand("test",True,22) formatting - can parse some text followed a command', () => {
+  it('can pass commands with myCommand("test",true,22) formatting - can parse some text followed a command', () => {
     const results = parser.parse('some text<<commandtext("test",true,22)>>');
 
     const expected = [
@@ -227,7 +227,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-  it('can pass commands with myCommand("test",True,22) formatting - can parse some text followed by a newline and a command', () => {
+  it('can pass commands with myCommand("test",true,22) formatting - can parse some text followed by a newline and a command', () => {
     const results = parser.parse('some text\n<<commandtext("test",true,22)>>');
 
     const expected = [
@@ -238,7 +238,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-  it('can pass commands with myCommand("test",True,22) formatting - correctly ignores a double newline', () => {
+  it('can pass commands with myCommand("test",true,22) formatting - correctly ignores a double newline', () => {
     const results = parser.parse('some text\n\n<<commandtext("test",true,22)>>');
 
     const expected = [
@@ -249,7 +249,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-  it('can pass commands with myCommand("test",True,22) formatting - correctly ignores a bunch of newlines', () => {
+  it('can pass commands with myCommand("test",true,22) formatting - correctly ignores a bunch of newlines', () => {
     const results = parser.parse('some text\n\n\n\n\n\n<<commandtext("test",true,22)>>\n');
 
     const expected = [
