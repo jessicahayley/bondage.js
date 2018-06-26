@@ -115,7 +115,7 @@ const grammar = {
       // Lexes as BeginCommand Identifier Text EndCommand
       ['BeginCommand Identifier Text EndCommand', '$$ = new yy.CommandNode($2 + " " + $3);'],
       ['BeginCommand Identifier LeftParen RightParen EndCommand', '$$ = new yy.CommandNode($2 + "()");'], /// <<myfunction()>>
-      ['BeginCommand Identifier LeftParen arguments RightParen EndCommand', '$$ = new yy.CommandNode($2 + "()");'], /// <<myfunction("test",True,22)>>
+      ['BeginCommand Identifier LeftParen arguments RightParen EndCommand', '$$ = new yy.CommandNode($2 + "()");'], /// <<myfunction("test",true,22)>>
     ],
 
     arguments: [
