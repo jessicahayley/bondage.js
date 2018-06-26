@@ -171,4 +171,92 @@ describe('Parser', () => {
 
     expect(results).to.deep.equal(expected);
   });
+
+  it('can pass commands with myCommand() formatting - can parse some text followed a command', () => {
+    const results = parser.parse('some text<<commandtext()>>');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can pass commands with myCommand() formatting - can parse some text followed by a newline and a command', () => {
+    const results = parser.parse('some text\n<<commandtext()>>');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can pass commands with myCommand() formatting - correctly ignores a double newline', () => {
+    const results = parser.parse('some text\n\n<<commandtext()>>');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can pass commands with myCommand() formatting - correctly ignores a bunch of newlines', () => {
+    const results = parser.parse('some text\n\n\n\n\n\n<<commandtext()>>\n');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'),
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can pass commands with myCommand("test",True,22) formatting - can parse some text followed a command', () => {
+    const results = parser.parse('some text<<commandtext("test",True,22)>>');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'), // will also add parameter parsing when this pull gets approved. Command node needs refactoring to support it
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can pass commands with myCommand("test",True,22) formatting - can parse some text followed by a newline and a command', () => {
+    const results = parser.parse('some text\n<<commandtext("test",True,22)>>');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'), // will also add parameter parsing when this pull gets approved. Command node needs refactoring to support it
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can pass commands with myCommand("test",True,22) formatting - correctly ignores a double newline', () => {
+    const results = parser.parse('some text\n\n<<commandtext("test",True,22)>>');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'), // will also add parameter parsing when this pull gets approved. Command node needs refactoring to support it
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
+
+  it('can pass commands with myCommand("test",True,22)formatting - correctly ignores a bunch of newlines', () => {
+    const results = parser.parse('some text\n\n\n\n\n\n<<commandtext("test",True,22)>>\n');
+
+    const expected = [
+      new nodes.TextNode('some text'),
+      new nodes.CommandNode('commandtext()'), // will also add parameter parsing when this pull gets approved. Command node needs refactoring to support it
+    ];
+
+    expect(results).to.deep.equal(expected);
+  });
 });
