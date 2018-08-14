@@ -25,6 +25,7 @@ class Runner {
   load(data) {
     for (const node of data) {
       this.yarnNodes[node.title] = {
+        title: node.title,
         tags: node.tags,
         body: node.body,
       };
@@ -81,7 +82,12 @@ class Runner {
 
     // Parse the entire node
     const parserNodes = Array.from(parser.parse(yarnNode.body));
-    yield* this.evalNodes(parserNodes);
+    const yarnNodeData = {
+      title:yarnNode.title,
+      tags:yarnNode.tags.split(" "),
+      body:yarnNode.body,
+    }
+    yield* this.evalNodes(parserNodes,yarnNodeData);
   }
 
   /**
@@ -89,7 +95,7 @@ class Runner {
    * the user. Calls itself recursively if that is required by nested nodes
    * @param {any[]} nodes
    */
-  * evalNodes(nodes) {
+  * evalNodes(nodes,yarnNodeData) {
     if (!nodes) return;
 
     let selectableNodes = null;
@@ -118,7 +124,7 @@ class Runner {
 
         if (node instanceof nodeTypes.Text) {
           // Just text to be returned
-          yield new results.TextResult(node.text);
+          yield new results.TextResult(node.text,yarnNodeData);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
