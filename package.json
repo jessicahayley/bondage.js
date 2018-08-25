@@ -4,7 +4,7 @@
   "description": "Yarn parser for Javascript",
   "main": "src/bondage.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha tests --recursive",
+    "test": "node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint ."
   },
   "bin": {
