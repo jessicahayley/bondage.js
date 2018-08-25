@@ -7,7 +7,7 @@ class TextResult extends Result {
    * Create a text display result
    * @param {string} [text] text to be displayed
    */
-  constructor(text,yarnNodeData) {
+  constructor(text, yarnNodeData) {
     super();
     this.text = text;
     this.data = yarnNodeData;

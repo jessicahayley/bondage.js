@@ -87,7 +87,7 @@ class Runner {
       tags:yarnNode.tags.split(" "),
       body:yarnNode.body,
     }
-    yield* this.evalNodes(parserNodes,yarnNodeData);
+    yield* this.evalNodes(parserNodes, yarnNodeData);
   }
 
   /**
@@ -95,7 +95,7 @@ class Runner {
    * the user. Calls itself recursively if that is required by nested nodes
    * @param {any[]} nodes
    */
-  * evalNodes(nodes,yarnNodeData) {
+  * evalNodes(nodes, yarnNodeData) {
     if (!nodes) return;
 
     let selectableNodes = null;
@@ -124,7 +124,7 @@ class Runner {
 
         if (node instanceof nodeTypes.Text) {
           // Just text to be returned
-          yield new results.TextResult(node.text,yarnNodeData);
+          yield new results.TextResult(node.text, yarnNodeData);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
