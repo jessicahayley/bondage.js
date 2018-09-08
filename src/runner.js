@@ -139,14 +139,15 @@ class Runner {
           // Run the results of the conditional
           yield* this.evalNodes(this.evaluateConditional(node));
         } else if (node instanceof nodeTypes.Command) {
+          
           if (node.command === 'stop') {
             // Special command, halt execution
             return;
           }
-
+          
           if (this.commandHandler) {
             this.commandHandler(node.command);
-          }
+          }else{yield new results.CommandResult(node.value);}
         }
       }
     }
@@ -333,4 +334,5 @@ module.exports = {
   Runner,
   TextResult: results.TextResult,
   OptionsResult: results.OptionsResult,
+  CommandResult: results.CommandResult,
 };

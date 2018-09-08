@@ -1,13 +1,13 @@
 'use strict';
 
-class Text { }
-class Shortcut { }
-class Link { }
-class Conditional { }
-class Assignment { }
-class Literal { }
-class Expression { }
-class Command { }
+class Text {}
+class Shortcut {}
+class Link {}
+class Conditional {}
+class Assignment {}
+class Literal {}
+class Expression {}
+class Command {}
 
 module.exports = {
   types: {
@@ -121,6 +121,7 @@ module.exports = {
       super();
       this.type = 'NumericLiteralNode';
       this.numericLiteral = numericLiteral;
+      this.value = numericLiteral;
     }
   },
 
@@ -129,6 +130,7 @@ module.exports = {
       super();
       this.type = 'StringLiteralNode';
       this.stringLiteral = stringLiteral;
+      this.value = '"' + stringLiteral + '"';
     }
   },
 
@@ -137,6 +139,7 @@ module.exports = {
       super();
       this.type = 'BooleanLiteralNode';
       this.booleanLiteral = booleanLiteral;
+      this.value = booleanLiteral;
     }
   },
 
@@ -145,6 +148,7 @@ module.exports = {
       super();
       this.type = 'VariableNode';
       this.variableName = variableName;
+      this.value = variableName;
     }
   },
 
@@ -358,10 +362,24 @@ module.exports = {
   },
 
   CommandNode: class extends Command {
-    constructor(command) {
+    constructor(command, parameters) {
       super();
       this.type = 'CommandNode';
       this.command = command;
+      this.value = command;
+      if (parameters === null || parameters === undefined) {
+        return;
+      }
+      this.value += '(';
+      if (parameters.length !== 0) {
+        parameters.forEach((parameter, i) => {
+          this.value += parameter.value;
+          if (i < parameters.length - 1) {
+            this.value += ',';
+          }
+        });
+      }
+      this.value += ')';
     }
   },
 };
