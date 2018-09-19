@@ -110,9 +110,9 @@ const grammar = {
 
     command: [
       ['BeginCommand Identifier EndCommand', '$$ = new yy.CommandNode($2);'],
-
-      // Extremely ugly hack because a command with spaces (e.g. <<foo bar>>)
-      // Lexes as BeginCommand Identifier Text EndCommand
+      ['BeginCommand CmdIdentifier EndCommand', '$$ = new yy.CommandNode($2);'],
+      /// Extremely ugly hack because a command with spaces (e.g. <<foo bar>>)
+      /// Lexes as BeginCommand Identifier Text EndCommand
       ['BeginCommand Identifier Text EndCommand', '$$ = new yy.CommandNode($2 + " " + $3);'],
     ],
 

@@ -2,7 +2,7 @@
 	{
 		"title": "BasicCommands",
 		"tags": "Tag",
-		"body": "<<command1>>text in between commands<<command with space>>",
+		"body": "<<command>>text in between commands<<command with space>> <<callFunction()>> <<callFunctionWithParam(\"test\",true,1,12.5)>>",
 		"position": {
 			"x": 449,
 			"y": 252

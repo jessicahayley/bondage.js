@@ -389,17 +389,22 @@ describe('Dialogue', () => {
     runner.load(commandAndFunctionYarnData);
     const run = runner.run('BasicCommands');
 
-    let lastCommand = '';
+    let commands= [];
     runner.setCommandHandler((command) => {
-      lastCommand = command;
+      commands.push(command)
     });
-
     let value = run.next().value;
     expect(value).to.deep.equal(new bondage.TextResult('text in between commands', value.data));
-    expect(lastCommand).to.equal('command1');
+    expect(commands[0]).to.equal('command');
 
     expect(run.next().done).to.be.true;
-    expect(lastCommand).to.equal('command with space');
+    expect(commands[1]).to.equal('command with space');
+
+    expect(run.next().done).to.be.true;
+    expect(commands[2]).to.equal('callFunction ()');//<<-- not sure why it adds a SPACE
+
+    expect(run.next().done).to.be.true;
+    expect(commands[3]).to.equal('callFunctionWithParam (\"test\",true,1,12.5)');//<<-- not sure why it adds a SPACE
   });
 
   it('Evaluates a function and uses it in a conditional', () => {
