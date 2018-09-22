@@ -22,8 +22,7 @@ function makeStates() {
                              .addTransition('EndIf')
                              .addTransition('Set', 'assignment')
                              .addTransition('EndCommand', 'base', true)
-                             .addTransition('CmdIdentifier', 'commandOrExpression')
-                             .addTransition('Text', 'commandOrExpression')
+                             .addTransition('CommandCall', 'commandOrExpression')
                              .addTextRule('Text'),
 
     commandOrExpression: new LexerState().addTransition('EndCommand', 'base', true)
