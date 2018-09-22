@@ -404,7 +404,7 @@ describe('Dialogue', () => {
     expect(commands[2]).to.equal('callFunction()');
 
     expect(run.next().done).to.be.true;
-    expect(commands[3]).to.equal('callFunctionWithParam(\"test\",true,1,12.5)');
+    expect(commands[3]).to.equal('callFunctionWithParam(\"test\",true,1,12.5,[2,3])');
   });
 
   it('Evaluates a function and uses it in a conditional', () => {
