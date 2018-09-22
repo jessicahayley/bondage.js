@@ -78,7 +78,7 @@ describe('Lexer', () => {
     lexer.setInput('<<option>>');
 
     expect(lexer.lex()).to.equal('BeginCommand');
-    expect(lexer.lex()).to.equal('Identifier');
+    expect(lexer.lex()).to.equal('CmdIdentifier');
     expect(lexer.lex()).to.equal('EndCommand');
     expect(lexer.lex()).to.equal('EndOfInput');
   });
@@ -143,7 +143,7 @@ describe('Lexer', () => {
     lexer.setInput('<<testcommand>>');
 
     expect(lexer.lex()).to.equal('BeginCommand');
-    expect(lexer.lex()).to.equal('Identifier');
+    expect(lexer.lex()).to.equal('CmdIdentifier');
     expect(lexer.lex()).to.equal('EndCommand');
     expect(lexer.lex()).to.equal('EndOfInput');
   });

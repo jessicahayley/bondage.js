@@ -401,10 +401,10 @@ describe('Dialogue', () => {
     expect(commands[1]).to.equal('command with space');
 
     expect(run.next().done).to.be.true;
-    expect(commands[2]).to.equal('callFunction ()');//<<-- not sure why it adds a SPACE
+    expect(commands[2]).to.equal('callFunction()');
 
     expect(run.next().done).to.be.true;
-    expect(commands[3]).to.equal('callFunctionWithParam (\"test\",true,1,12.5)');//<<-- not sure why it adds a SPACE
+    expect(commands[3]).to.equal('callFunctionWithParam(\"test\",true,1,12.5)');
   });
 
   it('Evaluates a function and uses it in a conditional', () => {

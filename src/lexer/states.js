@@ -22,7 +22,7 @@ function makeStates() {
                              .addTransition('EndIf')
                              .addTransition('Set', 'assignment')
                              .addTransition('EndCommand', 'base', true)
-                             .addTransition('Identifier', 'commandOrExpression')
+                             .addTransition('CmdIdentifier', 'commandOrExpression')
                              .addTransition('Text', 'commandOrExpression')
                              .addTextRule('Text'),
 
