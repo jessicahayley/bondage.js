@@ -89,7 +89,7 @@ const Tokens = {
 
   Identifier:           /[a-zA-Z0-9_:.]+/,         // a single word (used for functions)
 
-  CmdIdentifier:        /["'+=\[\]a-zA-Z0-9_:.,()]+/,  // a single word (used for commands)
+  CmdIdentifier:        /["'+-=\[\]\*a-zA-Z0-9_:;{}&|.,()]+/,  // a single word (used for commands)
 
   Text:                 /.*/,                      // a run of text until we hit other syntax.
 };
