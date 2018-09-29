@@ -39,16 +39,6 @@ const yarnData = JSON.parse(fs.readFileSync('yarnFile.json'));
 
 runner.load(yarnData);
 
-runner.setCommandHandler((command) => {
-  // Called whenever there is a <<command>>, the parameter being the text inside
-});
-
-// Register a function to be called from the dialog
-runner.registerFunction('isEven', (args) => {
-  // Used as <<if isEven($var)>>It is even<<endif>>
-  return args[0] % 2 == 0;
-});
-
 // Loop over the dialogue from the node titled 'Start'
 for (const result of runner.run('Start')) {
   // Do something else with the result
@@ -60,6 +50,9 @@ for (const result of runner.run('Start')) {
 
     // Select based on the option's index in the array (if you don't select an option, the dialog will continue past them)
     result.select(1);
+  } else if (result instanceof bondage.CommandResult) {
+     // If the text was inside <<here>>, it will get returned as a CommandResult string, which you can use in any way you want
+    console.log(result.text);
   }
 }
 
