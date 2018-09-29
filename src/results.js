@@ -14,6 +14,18 @@ class TextResult extends Result {
   }
 }
 
+class CommandResult extends Result {
+  /**
+   * Return a command string
+   * @param {string} [text] text to be displayed
+   */
+  constructor(text, yarnNodeData) {
+    super();
+    this.text = text;
+    this.data = yarnNodeData;
+  }
+}
+
 class OptionsResult extends Result {
   /**
    * Create a selectable list of options from the given list of text
@@ -33,4 +45,4 @@ class OptionsResult extends Result {
   }
 }
 
-module.exports = { Result, TextResult, OptionsResult };
+module.exports = { Result, TextResult, CommandResult, OptionsResult };

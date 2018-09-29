@@ -389,22 +389,16 @@ describe('Dialogue', () => {
     runner.load(commandAndFunctionYarnData);
     const run = runner.run('BasicCommands');
 
-    let commands= [];
-    runner.setCommandHandler((command) => {
-      commands.push(command)
-    });
     let value = run.next().value;
+    expect(value).to.deep.equal(new bondage.CommandResult('command', value.data));
+    value = run.next().value;
     expect(value).to.deep.equal(new bondage.TextResult('text in between commands', value.data));
-    expect(commands[0]).to.equal('command');
-
-    expect(run.next().done).to.be.true;
-    expect(commands[1]).to.equal('command with space');
-
-    expect(run.next().done).to.be.true;
-    expect(commands[2]).to.equal('callFunction()');
-
-    expect(run.next().done).to.be.true;
-    expect(commands[3]).to.equal('callFunctionWithParam(\"test\",true,1,12.5,[2,3])');
+    value = run.next().value;
+    expect(value).to.deep.equal(new bondage.CommandResult('command with space', value.data));
+    value = run.next().value;
+    expect(value).to.deep.equal(new bondage.CommandResult('callFunction()', value.data));
+    value = run.next().value;
+    expect(value).to.deep.equal(new bondage.CommandResult('callFunctionWithParam(\"test\",true,1,12.5,[2,3])', value.data));
   });
 
   it('Evaluates a function and uses it in a conditional', () => {

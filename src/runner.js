@@ -9,7 +9,6 @@ class Runner {
   constructor() {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
-    this.commandHandler = null;
     this.functions = {};
     this.visited = {}; // Which nodes have been visited
 
@@ -44,19 +43,6 @@ class Runner {
     }
 
     this.variables = storage;
-  }
-
-  /**
-   * Set the function to be called whenever a command is given
-   * Should accept a single string as a parameter
-   * @param {function} handler
-   */
-  setCommandHandler(handler) {
-    if (typeof handler !== 'function') {
-      throw new Error('Command handler must be a function');
-    }
-
-    this.commandHandler = handler;
   }
 
   registerFunction(name, func) {
@@ -143,10 +129,7 @@ class Runner {
             // Special command, halt execution
             return;
           }
-
-          if (this.commandHandler) {
-            this.commandHandler(node.command);
-          }
+          yield new results.CommandResult(node.command, yarnNodeData);
         }
       }
     }
@@ -332,5 +315,6 @@ class Runner {
 module.exports = {
   Runner,
   TextResult: results.TextResult,
+  CommandResult: results.CommandResult,
   OptionsResult: results.OptionsResult,
 };
