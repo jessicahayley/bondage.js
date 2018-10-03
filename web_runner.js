@@ -28,11 +28,26 @@ function recompile() {
   displayArea.innerHTML = '';
 
   dialogue = new bondage.Runner();
-  var data = JSON.parse(yarnTextField.value);
-  dialogue.load(data);
+  var file = document.getElementById('file-input').files[0];
+  if (file != null) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function (e)
+    {
+      var text = e.target.result;
+      var data = JSON.parse(text);
+      dialogue.load(data);  
+      dialogueIterator = dialogue.run(document.getElementById('nodename-text').value || 'Start');
+      step();  
+    }
+  }
+  else {
+    var data = JSON.parse(yarnTextField.value);
+    dialogue.load(data);  
+    dialogueIterator = dialogue.run(document.getElementById('nodename-text').value || 'Start');
+    step();  
+  }
 
-  dialogueIterator = dialogue.run(document.getElementById('nodename-text').value || 'Start');
-  step();
 }
 
 function showOptions(result) {
@@ -66,7 +81,6 @@ function jump() {
 
 window.onload = function () {
   document.getElementById('recompile-button').onclick = recompile;
-
   yarnTextField = document.getElementById('yarndata-text');
   displayArea = document.getElementById('display-area');
 };
