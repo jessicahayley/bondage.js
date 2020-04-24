@@ -34,12 +34,10 @@ class OptionsResult extends Result {
   /**
    * Create a selectable list of options from the given list of text
    * @param {string[]} [options] list of the text of options to be shown
-   * @param {int} [lineNo] the line column and row of the parsed result
    */
-  constructor(options, lineNo) {
+  constructor(options) {
     super();
     this.options = options;
-    this.lineNo = lineNo;
     this.selected = -1;
   }
 

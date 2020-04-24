@@ -39,23 +39,21 @@ module.exports = {
   },
 
   DialogOptionNode: class extends Shortcut {
-    constructor(text, content, lineNo) {
+    constructor(text, content) {
       super();
       this.type = 'DialogOptionNode';
       this.text = text;
       this.content = content;
-      this.lineNo = lineNo;
     }
   },
 
   ConditionalDialogOptionNode: class extends Shortcut {
-    constructor(text, content, conditionalExpression, lineNo) {
+    constructor(text, content, conditionalExpression) {
       super();
       this.type = 'ConditionalDialogOptionNode';
       this.text = text;
       this.content = content;
       this.conditionalExpression = conditionalExpression;
-      this.lineNo = lineNo;
     }
   },
 

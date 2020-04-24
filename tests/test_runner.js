@@ -35,7 +35,7 @@ describe('Dialogue', () => {
     const run = runner.run('OneNode');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data, value.lineNo));
     expect(run.next().done).to.be.true;
   });
 
@@ -44,7 +44,7 @@ describe('Dialogue', () => {
     const run = runner.run('Option2');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line', value.data, value.lineNo));
     expect(run.next().done).to.be.true;
   });
 
@@ -53,16 +53,16 @@ describe('Dialogue', () => {
     const run = runner.run('ThreeNodes');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is another test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is another test line', value.data, value.lineNo));
 
     const optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Option1', 'Option2']));
 
     optionResult.select(0);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -72,16 +72,16 @@ describe('Dialogue', () => {
     const run = runner.run('NamedLink');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is another test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is another test line', value.data, value.lineNo));
 
     const optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['First choice', 'Second choice']));
 
     optionResult.select(1);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is Option2\'s test line', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -91,9 +91,9 @@ describe('Dialogue', () => {
     const run = runner.run('OneLinkPassthrough');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('First test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('First test line', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line', value.data, value.lineNo));
     expect(run.next().done).to.be.true;
   });
 
@@ -102,21 +102,21 @@ describe('Dialogue', () => {
     const run = runner.run('LinkAfterShortcuts');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('First test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('First test line', value.data, value.lineNo));
 
     let optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Shortcut 1', 'Shortcut 2']));
 
     optionResult.select(1);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is the second shortcut', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is the second shortcut', value.data, value.lineNo));
 
     optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['First link', 'Second link']));
 
     optionResult.select(0);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is Option1\'s test line', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -126,16 +126,16 @@ describe('Dialogue', () => {
     const run = runner.run('NonNested');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data, value.lineNo));
 
     const optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Option 1', 'Option 2']));
 
     optionResult.select(1);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is the second option', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is the second option', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is after both options', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is after both options', value.data, value.lineNo));
     expect(run.next().done).to.be.true;
   });
 
@@ -144,23 +144,23 @@ describe('Dialogue', () => {
     const run = runner.run('Nested');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('text', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('text', value.data, value.lineNo));
 
     let optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['shortcut1', 'shortcut2']));
 
     optionResult.select(0);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text1', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text1', value.data, value.lineNo));
 
     optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['nestedshortcut1', 'nestedshortcut2']));
 
     optionResult.select(1);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('NestedText2', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('NestedText2', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('more text', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('more text', value.data, value.lineNo));
     expect(run.next().done).to.be.true;
   });
 
@@ -169,16 +169,16 @@ describe('Dialogue', () => {
     const run = runner.run('Conditional');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is a test line', value.data, value.lineNo));
 
     const optionResult = run.next().value;
     expect(optionResult).to.deep.equal(new bondage.OptionsResult(['Option 1', 'Option 3']));
 
     optionResult.select(1);
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is the third option', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is the third option', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('This is after both options', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This is after both options', value.data, value.lineNo));
     expect(run.next().done).to.be.true;
   });
 
@@ -187,12 +187,12 @@ describe('Dialogue', () => {
     const run = runner.run('Numeric');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.equal(-123.4);
 
@@ -204,12 +204,12 @@ describe('Dialogue', () => {
     const run = runner.run('NumericExpression');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.equal(((1 + 2) * -3) + 4.3);
 
@@ -221,12 +221,12 @@ describe('Dialogue', () => {
     const run = runner.run('String');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.equal('Variable String');
 
@@ -238,12 +238,12 @@ describe('Dialogue', () => {
     const run = runner.run('StringExpression');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.equal('Variable String Appended');
 
@@ -255,12 +255,12 @@ describe('Dialogue', () => {
     const run = runner.run('Boolean');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.equal(true);
 
@@ -272,12 +272,12 @@ describe('Dialogue', () => {
     const run = runner.run('BooleanExpression');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('testvar')).to.equal(true);
 
@@ -289,13 +289,13 @@ describe('Dialogue', () => {
     const run = runner.run('Variable');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('firstvar')).to.be.undefined;
     expect(runner.variables.get('secondvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('secondvar')).to.equal('First variable string');
 
@@ -307,13 +307,13 @@ describe('Dialogue', () => {
     const run = runner.run('VariableExpression');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line', value.data, value.lineNo));
 
     expect(runner.variables.get('firstvar')).to.be.undefined;
     expect(runner.variables.get('secondvar')).to.be.undefined;
 
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Test Line After', value.data, value.lineNo));
 
     expect(runner.variables.get('secondvar')).to.equal(-4.3 + 100);
 
@@ -325,11 +325,11 @@ describe('Dialogue', () => {
     const run = runner.run('BasicIf');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Inside if', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Inside if', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -339,11 +339,11 @@ describe('Dialogue', () => {
     const run = runner.run('BasicIfElse');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data, value.lineNo, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Inside else', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Inside else', value.data, value.lineNo, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data, value.lineNo, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -353,11 +353,11 @@ describe('Dialogue', () => {
     const run = runner.run('BasicIfElseIf');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Inside elseif', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Inside elseif', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -367,11 +367,11 @@ describe('Dialogue', () => {
     const run = runner.run('BasicIfElseIfElse');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text before', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Inside else', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Inside else', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Text after', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -381,7 +381,7 @@ describe('Dialogue', () => {
     const run = runner.run('StopCommand');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('First line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('First line', value.data, value.lineNo));
     expect(run.next().done).to.be.true;
   });
 
@@ -391,19 +391,19 @@ describe('Dialogue', () => {
 
     let value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.CommandResult('command', value.data));
+    expect(value).to.deep.equal(new bondage.CommandResult('command', value.data, value.lineNo));
     value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.TextResult('text in between commands', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('text in between commands', value.data, value.lineNo));
     value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.CommandResult('command with space', value.data));
+    expect(value).to.deep.equal(new bondage.CommandResult('command with space', value.data, value.lineNo));
     value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.CommandResult('callFunction()', value.data));
+    expect(value).to.deep.equal(new bondage.CommandResult('callFunction()', value.data, value.lineNo));
     value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.CommandResult('callFunctionWithParam(\"test\",true,1,12.5,[2,3])', value.data));
+    expect(value).to.deep.equal(new bondage.CommandResult('callFunctionWithParam(\"test\",true,1,12.5,[2,3])', value.data, value.lineNo));
   });
 
   it('Evaluates a function and uses it in a conditional', () => {
@@ -425,13 +425,13 @@ describe('Dialogue', () => {
 
     let value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.TextResult('First line', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('First line', value.data, value.lineNo));
     value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.TextResult('This should show', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('This should show', value.data, value.lineNo));
     value = run.next().value;
     expect(value.data).to.not.be.undefined;
-    expect(value).to.deep.equal(new bondage.TextResult('After both', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('After both', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
@@ -441,9 +441,9 @@ describe('Dialogue', () => {
     const run = runner.run('VisitedFunctionStart');
 
     let value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('Hello', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('Hello', value.data, value.lineNo));
     value = run.next().value;
-    expect(value).to.deep.equal(new bondage.TextResult('you have visited VisitedFunctionStart!', value.data));
+    expect(value).to.deep.equal(new bondage.TextResult('you have visited VisitedFunctionStart!', value.data, value.lineNo));
 
     expect(run.next().done).to.be.true;
   });
