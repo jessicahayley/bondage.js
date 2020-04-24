@@ -94,7 +94,6 @@ class Runner {
     // Need to accumulate all adjacent selectables into one list (hence some of
     //  the weirdness here)
     for (const node of nodes) {
-      console.log(">",node)
 
       if (selectableNodes !== null && node instanceof selectionType) {
         // We're accumulating selection nodes, so add this one to the list
