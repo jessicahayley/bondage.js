@@ -94,6 +94,8 @@ class Runner {
     // Need to accumulate all adjacent selectables into one list (hence some of
     //  the weirdness here)
     for (const node of nodes) {
+      console.log(">",node)
+
       if (selectableNodes !== null && node instanceof selectionType) {
         // We're accumulating selection nodes, so add this one to the list
         // TODO: handle conditional option nodes
@@ -110,7 +112,7 @@ class Runner {
 
         if (node instanceof nodeTypes.Text) {
           // Just text to be returned
-          yield new results.TextResult(node.text, yarnNodeData);
+          yield new results.TextResult(node.text, yarnNodeData, node.lineNo);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
@@ -129,7 +131,7 @@ class Runner {
             // Special command, halt execution
             return;
           }
-          yield new results.CommandResult(node.command, yarnNodeData);
+          yield new results.CommandResult(node.command, yarnNodeData, node.lineNo);
         }
       }
     }
@@ -164,7 +166,7 @@ class Runner {
 
       const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
         return s.text;
-      }));
+      }), filteredSelections[0] ? filteredSelections[0].lineNo : -1);
 
       yield optionResults;
 

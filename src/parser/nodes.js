@@ -39,21 +39,23 @@ module.exports = {
   },
 
   DialogOptionNode: class extends Shortcut {
-    constructor(text, content) {
+    constructor(text, content, lineNo) {
       super();
       this.type = 'DialogOptionNode';
       this.text = text;
       this.content = content;
+      this.lineNo = lineNo;
     }
   },
 
   ConditionalDialogOptionNode: class extends Shortcut {
-    constructor(text, content, conditionalExpression) {
+    constructor(text, content, conditionalExpression, lineNo) {
       super();
       this.type = 'ConditionalDialogOptionNode';
       this.text = text;
       this.content = content;
       this.conditionalExpression = conditionalExpression;
+      this.lineNo = lineNo;
     }
   },
 
@@ -97,10 +99,11 @@ module.exports = {
 
   // /////////////// Contents Nodes
   TextNode: class extends Text {
-    constructor(text) {
+    constructor(text, lineNo) {
       super();
       this.type = 'TextNode';
       this.text = text;
+      this.lineNo = lineNo;
     }
   },
 
@@ -358,10 +361,11 @@ module.exports = {
   },
 
   CommandNode: class extends Command {
-    constructor(command) {
+    constructor(command, lineNo) {
       super();
       this.type = 'CommandNode';
       this.command = command;
+      this.lineNo = lineNo;
     }
   },
 };
