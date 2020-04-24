@@ -6,7 +6,7 @@ class TextResult extends Result {
   /**
    * Create a text display result
    * @param {string} [text] text to be displayed
-   * @param {int} [lineNo] the line column and row of the parsed result
+   * @param {first_column: int, first_line: int, last_column: int, last_line: int} [lineNo] position
    */
   constructor(text, yarnNodeData, lineNo) {
     super();
@@ -20,7 +20,7 @@ class CommandResult extends Result {
   /**
    * Return a command string
    * @param {string} [text] text to be displayed
-   * @param {int} [lineNo] the line column and row of the parsed result
+   * @param {first_column: int, first_line: int, last_column: int, last_line: int} [lineNo] position
    */
   constructor(text, yarnNodeData, lineNo) {
     super();
