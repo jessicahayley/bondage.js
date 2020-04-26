@@ -6,13 +6,13 @@ class TextResult extends Result {
   /**
    * Create a text display result
    * @param {string} [text] text to be displayed
-   * @param {first_column: int, first_line: int, last_column: int, last_line: int} [lineNo] position
+   * @param {int} [lineNum] line number of the result in the node
    */
-  constructor(text, yarnNodeData, lineNo) {
+  constructor(text, yarnNodeData, lineNum) {
     super();
     this.text = text;
     this.data = yarnNodeData;
-    this.lineNo = lineNo;
+    this.lineNum = lineNum;
   }
 }
 
@@ -20,13 +20,13 @@ class CommandResult extends Result {
   /**
    * Return a command string
    * @param {string} [text] text to be displayed
-   * @param {first_column: int, first_line: int, last_column: int, last_line: int} [lineNo] position
+   * @param {int} [lineNum] line number of the result in the node
    */
-  constructor(text, yarnNodeData, lineNo) {
+  constructor(text, yarnNodeData, lineNum) {
     super();
     this.text = text;
     this.data = yarnNodeData;
-    this.lineNo = lineNo;
+    this.lineNum = lineNum;
   }
 }
 

@@ -14,7 +14,7 @@ describe('Parser', () => {
     const results = parser.parse('some text');
 
     const expected = [
-      new nodes.TextNode('some text', results[0].lineNo),
+      new nodes.TextNode('some text', { first_line: results[0].lineNum }),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -56,7 +56,7 @@ describe('Parser', () => {
     const results = parser.parse('some text [[optiondest]]');
 
     const expected = [
-      new nodes.TextNode('some text ', results[0].lineNo),
+      new nodes.TextNode('some text ', { first_line: results[0].lineNum }),
       new nodes.LinkNode('optiondest'),
     ];
 
@@ -67,7 +67,7 @@ describe('Parser', () => {
     const results = parser.parse('some text\n[[optiondest]]');
 
     const expected = [
-      new nodes.TextNode('some text', results[0].lineNo),
+      new nodes.TextNode('some text', { first_line: results[0].lineNum }),
       new nodes.LinkNode('optiondest'),
     ];
 
@@ -78,8 +78,8 @@ describe('Parser', () => {
     const results = parser.parse('some text\n<<commandtext>>');
 
     const expected = [
-      new nodes.TextNode('some text', results[0].lineNo),
-      new nodes.CommandNode('commandtext', results[1].lineNo),
+      new nodes.TextNode('some text', { first_line: results[0].lineNum }),
+      new nodes.CommandNode('commandtext', { first_line: results[1].lineNum }),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -120,10 +120,10 @@ describe('Parser', () => {
     const results = parser.parse('text\n-> shortcut1\n\tText1\n-> shortcut2\n\tText2\nmore text');
 
     const expected = [
-      new nodes.TextNode('text', { first_column: 1, first_line: 1, last_column: 5, last_line: 1 }),
-      new nodes.DialogOptionNode('shortcut1', [new nodes.TextNode('Text1', { first_column: 5, first_line: 3, last_column: 10, last_line: 3 })]),
-      new nodes.DialogOptionNode('shortcut2', [new nodes.TextNode('Text2', { first_column: 5, first_line: 5, last_column: 10, last_line: 5 })]),
-      new nodes.TextNode('more text', { first_column: 1, first_line: 6, last_column: 10, last_line: 6 }),
+      new nodes.TextNode('text', { first_line: 1 }),
+      new nodes.DialogOptionNode('shortcut1', [new nodes.TextNode('Text1', { first_line: 3 })]),
+      new nodes.DialogOptionNode('shortcut2', [new nodes.TextNode('Text2', { first_line: 5 })]),
+      new nodes.TextNode('more text', { first_line: 6 }),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -133,18 +133,18 @@ describe('Parser', () => {
     const results = parser.parse('text\n-> shortcut1\n\tText1\n\t-> nestedshortcut1\n\t\tNestedText1\n\t-> nestedshortcut2\n\t\tNestedText2\n-> shortcut2\n\tText2\nmore text');
 
     const expected = [
-      new nodes.TextNode('text', { first_column: 1, first_line: 1, last_column: 5, last_line: 1 }),
+      new nodes.TextNode('text', { first_line: 1 }),
       new nodes.DialogOptionNode('shortcut1', [
-        new nodes.TextNode('Text1', { first_column: 5, first_line: 3, last_column: 10, last_line: 3 }),
+        new nodes.TextNode('Text1', { first_line: 3 }),
         new nodes.DialogOptionNode('nestedshortcut1', [
-          new nodes.TextNode('NestedText1', { first_column: 6, first_line: 5, last_column: 17, last_line: 5 }),
+          new nodes.TextNode('NestedText1', { first_line: 5 }),
         ]),
         new nodes.DialogOptionNode('nestedshortcut2', [
-          new nodes.TextNode('NestedText2', { first_column: 6, first_line: 7, last_column: 17, last_line: 7 }),
+          new nodes.TextNode('NestedText2', { first_line: 7 }),
         ]),
       ]),
-      new nodes.DialogOptionNode('shortcut2', [new nodes.TextNode('Text2', { first_column: 5, first_line: 9, last_column: 10, last_line: 9 })]),
-      new nodes.TextNode('more text', { first_column: 1, first_line: 10, last_column: 10, last_line: 10 }),
+      new nodes.DialogOptionNode('shortcut2', [new nodes.TextNode('Text2', { first_line: 9 })]),
+      new nodes.TextNode('more text', { first_line: 10 }),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -154,8 +154,8 @@ describe('Parser', () => {
     const results = parser.parse('some text\n\n<<commandtext>>');
 
     const expected = [
-      new nodes.TextNode('some text', results[0].lineNo),
-      new nodes.CommandNode('commandtext', results[1].lineNo),
+      new nodes.TextNode('some text', { first_line: results[0].lineNum }),
+      new nodes.CommandNode('commandtext', { first_line: results[1].lineNum }),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -165,8 +165,8 @@ describe('Parser', () => {
     const results = parser.parse('some text\n\n\n\n\n\n<<commandtext>>\n');
 
     const expected = [
-      new nodes.TextNode('some text', results[0].lineNo),
-      new nodes.CommandNode('commandtext', results[1].lineNo),
+      new nodes.TextNode('some text', { first_line: results[0].lineNum }),
+      new nodes.CommandNode('commandtext', { first_line: results[1].lineNum }),
     ];
 
     expect(results).to.deep.equal(expected);

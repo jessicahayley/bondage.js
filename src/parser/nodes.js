@@ -101,7 +101,7 @@ module.exports = {
       super();
       this.type = 'TextNode';
       this.text = text;
-      this.lineNo = lineNo;
+      this.lineNum = lineNo ? lineNo.first_line : -1;
     }
   },
 
@@ -363,7 +363,7 @@ module.exports = {
       super();
       this.type = 'CommandNode';
       this.command = command;
-      this.lineNo = lineNo;
+      this.lineNum = lineNo ? lineNo.first_line : -1;
     }
   },
 };

@@ -111,7 +111,7 @@ class Runner {
 
         if (node instanceof nodeTypes.Text) {
           // Just text to be returned
-          yield new results.TextResult(node.text, yarnNodeData, node.lineNo);
+          yield new results.TextResult(node.text, yarnNodeData, node.lineNum);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
@@ -130,7 +130,7 @@ class Runner {
             // Special command, halt execution
             return;
           }
-          yield new results.CommandResult(node.command, yarnNodeData, node.lineNo);
+          yield new results.CommandResult(node.command, yarnNodeData, node.lineNum);
         }
       }
     }
