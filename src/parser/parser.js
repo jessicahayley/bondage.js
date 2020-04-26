@@ -53,13 +53,13 @@ const grammar = {
     ],
 
     link: [
-      ['OptionStart Text OptionEnd', '$$ = new yy.LinkNode($2);'],
-      ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.LinkNode($2, $4);'],
+      ['OptionStart Text OptionEnd', '$$ = new yy.LinkNode($2, undefined, @$);'],
+      ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.LinkNode($2, $4, @$);'],
     ],
 
     shortcut: [
-      ['ShortcutOption Text Indent statements Dedent', '$$ = new yy.DialogOptionNode($2, $4);'],
-      ['ShortcutOption Text BeginCommand If expression EndCommand Indent statements Dedent', '$$ = new yy.ConditionalDialogOptionNode($2, $8, $5);'],
+      ['ShortcutOption Text Indent statements Dedent', '$$ = new yy.DialogOptionNode($2, $4, @$);'],
+      ['ShortcutOption Text BeginCommand If expression EndCommand Indent statements Dedent', '$$ = new yy.ConditionalDialogOptionNode($2, $8, $5, @$);'],
     ],
 
     expression: [

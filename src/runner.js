@@ -165,6 +165,8 @@ class Runner {
 
       const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
         return s.text;
+      }), filteredSelections.map((s) => {
+        return s.lineNum || -1;
       }));
 
       yield optionResults;
