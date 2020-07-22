@@ -89,45 +89,5 @@
 			"y": 252
 		},
 		"colorID": 0
-	},
-	{
-		"title": "TextAfterOption",
-		"tags": "Tag",
-		"body": "Text before\n[[FinalOption|Objective]]\nText after",
-		"position": {
-			"x": 449,
-			"y": 252
-		},
-		"colorID": 0
-	},
-	{
-		"title": "OptionAfterSuccessConditional",
-		"tags": "Tag",
-		"body": "<<set $haskey to true>>\nText before\n<<if $haskey == true>>\nInside if\n<<endif>>\nText after\n[[FinalOption|Objective]]",
-		"position": {
-			"x": 449,
-			"y": 252
-		},
-		"colorID": 0
-	},
-	{
-		"title": "OptionAfterOptionWithinConditional",
-		"tags": "Tag",
-		"body": "<<set $haskey to true>>\nText before\n<<if $haskey == true>>\nInside if\n[[Give key|give.key]]\n<<endif>>\nText after\n[[FinalOption|Objective]]",
-		"position": {
-			"x": 449,
-			"y": 252
-		},
-		"colorID": 0
-	},
-	{
-		"title": "give.key",
-		"tags": "Tag",
-		"body": "You give the key to the troll.",
-		"position": {
-			"x": 449,
-			"y": 252
-		},
-		"colorID": 0
 	}
 ]
