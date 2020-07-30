@@ -53,7 +53,7 @@
 	{
 		"title": "BasicIf",
 		"tags": "Tag",
-		"body": "<<set $testvar = 321>>\nText before\n<<if $testvar == 321>>Inside if<<endif>>Text after",
+		"body": "<<set $testvar = 321>>\nText before\n<<if $testvar == 321>>\nInside if\nInside if2<<endif>>Text after",
 		"position": {
 			"x": 449,
 			"y": 252
@@ -84,6 +84,56 @@
 		"title": "BasicIfElseIfElse",
 		"tags": "Tag",
 		"body": "<<set $testvar = 321>>\nText before\n<<if $testvar == 123>>Inside if<<elseif $testvar == 1>>Inside elseif<<else>>Inside else<<endif>>Text after",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "TextAfterOption",
+		"tags": "Tag",
+		"body": "Text before\n[[FinalOption|Objective]]\nText after",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "ConditionalOption",
+		"tags": "Tag",
+		"body": "<<set $haskey to true>>\nText before\n<<if $haskey == true>>\n[[Cond Option|Objective]]\n<<endif>>\nText after\n",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "OptionAfterSuccessConditional",
+		"tags": "Tag",
+		"body": "<<set $haskey to true>>\nText before\n<<if $haskey == true>>\nInside if\n<<endif>>\nText after\n[[FinalOption|Objective]]",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "OptionAfterOptionWithinConditional",
+		"tags": "Tag",
+		"body": "<<set $haskey to true>>\nText before\n<<if $haskey == true>>\nInside if\n[[Give key|give.key]]\n<<endif>>\nText after\n[[FinalOption|Objective]]",
+		"position": {
+			"x": 449,
+			"y": 252
+		},
+		"colorID": 0
+	},
+	{
+		"title": "give.key",
+		"tags": "Tag",
+		"body": "You give the key to the troll.",
 		"position": {
 			"x": 449,
 			"y": 252

@@ -48,14 +48,14 @@ const grammar = {
       ['shortcut', '$$ = $1;'],
       ['command', '$$ = $1;'],
       ['jump', '$$ = $1;'],
-      ['link', '$$ = $1;'],
+      ['option', '$$ = $1;'],
       ['assignment', '$$ = $1;'],
       ['Text', '$$ = new yy.TextNode($1, @$);'],
     ],
 
     shortcut: [
-      ['ShortcutOption Text Indent statements Dedent', '$$ = new yy.DialogOptionNode($2, $4, @$);'],
-      ['ShortcutOption Text BeginCommand If expression EndCommand Indent statements Dedent', '$$ = new yy.ConditionalDialogOptionNode($2, $8, $5, @$);'],
+      ['ShortcutOption Text Indent statements Dedent', '$$ = new yy.DialogShortcutNode($2, $4, @$);'],
+      ['ShortcutOption Text BeginCommand If expression EndCommand Indent statements Dedent', '$$ = new yy.ConditionalDialogShortcutNode($2, $8, $5, @$);'],
     ],
 
     command: [
@@ -66,8 +66,8 @@ const grammar = {
 			['OptionStart Text OptionEnd', '$$ = new yy.JumpNode($2, @$);'],
 		],
 	
-    link: [      
-      ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.LinkNode($2, $4, @$);'],
+    option: [      
+      ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.OptionNode($2, $4, @$);'],
     ],
 
     assignment: [

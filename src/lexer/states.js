@@ -8,7 +8,7 @@ const LexerState = require('./lexer-state.js');
 function makeStates() {
   return {
     base: new LexerState().addTransition('BeginCommand', 'command', true)
-                          .addTransition('OptionStart', 'link', true)
+                          .addTransition('OptionStart', 'option', true)
                           .addTransition('ShortcutOption', 'shortcutOption')
                           .addTextRule('Text'),
 
@@ -63,11 +63,11 @@ function makeStates() {
                                 .addTransition('Identifier')
                                 .addTextRule(),
 
-    link: new LexerState().addTransition('OptionEnd', 'base', true)
-                          .addTransition('OptionDelimit', 'linkDestination', true)
+    option: new LexerState().addTransition('OptionEnd', 'base', true)
+                          .addTransition('OptionDelimit', 'optionDestination', true)
                           .addTextRule('Text'),
 
-    linkDestination: new LexerState().addTransition('Identifier')
+    optionDestination: new LexerState().addTransition('Identifier')
                                      .addTransition('OptionEnd', 'base'),
   };
 }

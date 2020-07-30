@@ -12,7 +12,7 @@
 	{
 		"title": "Nested",
 		"tags": "Tag",
-		"body": "text\n-> shortcut1\n\tText1\n\t-> nestedshortcut1\n\t\tNestedText1\n\t-> nestedshortcut2\n\t\tNestedText2\n-> shortcut2\n\tText2\nmore text",
+		"body": "text\n-> shortcut1a\n\tText1\n\t-> nestedshortcut1\n\t\tNestedText1\n\t-> nestedshortcut2\n\t\tNestedText2\n-> shortcut2a\n\tText2\nmore text",
 		"position": {
 			"x": 449,
 			"y": 252

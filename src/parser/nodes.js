@@ -3,7 +3,7 @@
 class Text { }
 class Shortcut { }
 class Jump { }
-class Link { }
+class Option { }
 class Conditional { }
 class Assignment { }
 class Literal { }
@@ -15,7 +15,7 @@ module.exports = {
     Text,
     Shortcut,
 		Jump,
-    Link,
+    Option,
     Conditional,
     Assignment,
     Literal,
@@ -40,20 +40,20 @@ module.exports = {
     }
   },
 
-  DialogOptionNode: class extends Shortcut {
+  DialogShortcutNode: class extends Shortcut {
     constructor(text, content, lineNo) {
       super();
-      this.type = 'DialogOptionNode';
+      this.type = 'DialogShortcutNode';
       this.text = text;
       this.content = content;
       this.lineNum = lineNo ? lineNo.first_line : -1;
     }
   },
 
-  ConditionalDialogOptionNode: class extends Shortcut {
+  ConditionalDialogShortcutNode: class extends Shortcut {
     constructor(text, content, conditionalExpression, lineNo) {
       super();
-      this.type = 'ConditionalDialogOptionNode';
+      this.type = 'ConditionalDialogShortcutNode';
       this.text = text;
       this.content = content;
       this.conditionalExpression = conditionalExpression;
@@ -120,10 +120,10 @@ module.exports = {
     }
   },
   
-  LinkNode: class extends Link {
+  OptionNode: class extends Option {
     constructor(text, identifier, lineNo) {
       super();
-      this.type = 'LinkNode';
+      this.type = 'OptionNode';
       this.text = text || null;
       this.identifier = identifier || this.text; // [[Destination Text]]
       this.lineNum = lineNo ? lineNo.first_line : -1;
