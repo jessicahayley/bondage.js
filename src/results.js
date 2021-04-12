@@ -33,7 +33,7 @@ class CommandResult extends Result {
 class OptionsResult extends Result {
   /**
    * Create a selectable list of options from the given list of text
-   * @param {TextResult[]} [options] list of the textResults of options to be shown
+   * @param {string[]} [options] list of the textResults of options to be shown
    * @param {int[]} [lineNum] list of the line numbers of options to be shown
    */
   constructor(options, lineNum) {

@@ -190,7 +190,7 @@ class Runner {
         const formater = this.messageFormater.compile(s.text);
 
         // Return the Text Result of the option
-        return new results.TextResult(formater(this.variables.data), s, s.lineNum);
+        return formater(this.variables.data);
       }), filteredSelections.map((s) => {
         return s.lineNum || -1;
       }));
