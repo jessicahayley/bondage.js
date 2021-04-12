@@ -25,6 +25,7 @@ class Runner {
       },
       ...options || {} // rewrite and insert if options contain data
     };
+    this.messageFormater = new MessageFormat(this.options.formaterOptions.language);
 
     this.registerFunction('visited', (args) => {
       return !!this.visited[args[0]];
@@ -129,8 +130,7 @@ class Runner {
 
         if (node instanceof nodeTypes.Text) {
           // Text to be returned w/ formatting
-          const formatInstance = new MessageFormat(this.options.formaterOptions.language);
-          const formater = formatInstance.compile(node.text);
+          const formater = this.messageFormater.compile(node.text);
 
           yield new results.TextResult(formater(this.variables.data), yarnNodeData, node.lineNum, formater);
         } else if (node instanceof nodeTypes.Link) {
@@ -186,10 +186,8 @@ class Runner {
         return;
       }
 
-      const formatInstance = new MessageFormat(this.options.formaterOptions.language);
-
       const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
-        const formater = formatInstance.compile(s.text);
+        const formater = this.messageFormater.compile(s.text);
 
         // Return the Text Result of the option
         return new results.TextResult(formater(this.variables.data), s, s.lineNum, formater);
