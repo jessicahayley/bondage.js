@@ -4,14 +4,14 @@ const parser = require('./parser/parser.js');
 const results = require('./results.js');
 const DefaultVariableStorage = require('./default-variable-storage.js');
 const nodeTypes = require('./parser/nodes.js').types;
-const messageFormat = require('messageformat');
+const MessageFormat = require('messageformat');
 
 class Runner {
   /**
    * Creates an instance of Runner.
-   * @param {object} [options]
-   * @param {object} options.compilerOptions
-   * @param {string} options.compilerOptions.language
+   * @param {object} [options] Options for the runner
+   * @param {object} options.formaterOptions Options for messageFormat formater
+   * @param {string} options.formaterOptions.language Options for the language of the formater
    * @memberof Runner
    */
   constructor(options = {}) {
@@ -20,11 +20,11 @@ class Runner {
     this.functions = {};
     this.visited = {}; // Which nodes have been visited
     this.options = {
-      compilerOptions: {
+      formaterOptions: {
         language: 'en' // Handle messageFormat language change
       },
       ...options // rewrite and insert if options contain data
-    }
+    };
 
     this.registerFunction('visited', (args) => {
       return !!this.visited[args[0]];
@@ -128,8 +128,13 @@ class Runner {
         }
 
         if (node instanceof nodeTypes.Text) {
-          // Just text to be returned
-          yield new results.TextResult(node.text, yarnNodeData, node.lineNum);
+          // Text to be returned w/ formatting
+          const formatInstance = new MessageFormat(
+            this.options.formaterOptions.language || 'en' // Fallback language to English
+          );
+          const formater = formatInstance.compile(node.text);
+
+          yield new results.TextResult(formater(this.variables.data), formater, yarnNodeData, node.lineNum);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
@@ -184,7 +189,13 @@ class Runner {
       }
 
       const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
-        return s.text;
+        const formatInstance = new MessageFormat(
+          this.options.formaterOptions.language || 'en' // Fallback language to English
+        );
+        const formater = formatInstance.compile(s.text);
+
+        // Return the Text Result of the option
+        return results.TextResult(formater(this.variables.data), formater, s, s.lineNum);
       }), filteredSelections.map((s) => {
         return s.lineNum || -1;
       }));
