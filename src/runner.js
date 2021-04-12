@@ -20,12 +20,10 @@ class Runner {
     this.functions = {};
     this.visited = {}; // Which nodes have been visited
     this.options = {
-      formaterOptions: {
-        language: 'en' // Handle messageFormat language change
-      },
+      language: 'en', // Handle messageFormat language change
       ...options || {} // rewrite and insert if options contain data
     };
-    this.messageFormater = new MessageFormat(this.options.formaterOptions.language);
+    this.messageFormater = new MessageFormat(this.options.language);
 
     this.registerFunction('visited', (args) => {
       return !!this.visited[args[0]];
