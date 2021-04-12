@@ -14,7 +14,7 @@ class Runner {
    * @param {string} options.formaterOptions.language Options for the language of the formater
    * @memberof Runner
    */
-  constructor(options = {}) {
+  constructor(options) {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
     this.functions = {};
@@ -23,7 +23,7 @@ class Runner {
       formaterOptions: {
         language: 'en' // Handle messageFormat language change
       },
-      ...options // rewrite and insert if options contain data
+      ...options || {} // rewrite and insert if options contain data
     };
 
     this.registerFunction('visited', (args) => {
@@ -195,7 +195,7 @@ class Runner {
         const formater = formatInstance.compile(s.text);
 
         // Return the Text Result of the option
-        return results.TextResult(formater(this.variables.data), formater, s, s.lineNum);
+        return new results.TextResult(formater(this.variables.data), formater, s, s.lineNum);
       }), filteredSelections.map((s) => {
         return s.lineNum || -1;
       }));
