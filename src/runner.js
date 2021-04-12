@@ -132,7 +132,7 @@ class Runner {
           // Text to be returned w/ formatting
           const formater = this.messageFormater.compile(node.text);
 
-          yield new results.TextResult(formater(this.variables.data), yarnNodeData, node.lineNum, formater);
+          yield new results.TextResult(formater(this.variables.data), yarnNodeData, node.lineNum);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
@@ -190,7 +190,7 @@ class Runner {
         const formater = this.messageFormater.compile(s.text);
 
         // Return the Text Result of the option
-        return new results.TextResult(formater(this.variables.data), s, s.lineNum, formater);
+        return new results.TextResult(formater(this.variables.data), s, s.lineNum);
       }), filteredSelections.map((s) => {
         return s.lineNum || -1;
       }));
