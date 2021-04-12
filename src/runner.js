@@ -10,8 +10,7 @@ class Runner {
   /**
    * Creates an instance of Runner.
    * @param {object} [options] Options for the runner
-   * @param {object} options.formaterOptions Options for messageFormat formater
-   * @param {string} options.formaterOptions.language Options for the language of the formater
+   * @param {string} options.language Options for the language of the formater
    * @memberof Runner
    */
   constructor(options) {
