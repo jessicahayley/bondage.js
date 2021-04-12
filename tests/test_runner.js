@@ -15,6 +15,7 @@ describe('Dialogue', () => {
   let assignmentYarnData;
   let conditionalYarnData;
   let commandAndFunctionYarnData;
+  let formattingYarnData;
 
   let runner;
 
@@ -24,6 +25,7 @@ describe('Dialogue', () => {
     assignmentYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/assignment.json'));
     conditionalYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/conditions.json'));
     commandAndFunctionYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/commandsandfunctions.json'));
+    formattingYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/formatting.json'));
   });
 
   beforeEach(() => {
@@ -446,5 +448,56 @@ describe('Dialogue', () => {
     expect(value).to.deep.equal(new bondage.TextResult('you have visited VisitedFunctionStart!', value.data, value.lineNum));
 
     expect(run.next().done).to.be.true;
+  });
+
+  it('Can insert values into message using variable storage', () => {
+    runner.load(formattingYarnData);
+    const run = runner.run('Start');
+
+    const value = run.next().value;
+
+    expect(value.text).to.equal("Hello Adventurer! who's your day going ?");
+  });
+
+  it('Can insert plural dependant of number', () => {
+    runner.load(formattingYarnData);
+
+    let run = runner.run('NoMoney');
+    let value = run.next().value;
+    expect(value.text).to.equal('You have no gold, what a shame...');
+    run = runner.run('LowMoney');
+    value = run.next().value;
+    expect(value.text).to.equal('You have one piece inside your pocket.');
+    run = runner.run('HighMoney');
+    value = run.next().value;
+    expect(value.text).to.equal('You have 175 gold pieces!');
+  });
+
+  it('Can insert position number with ordinal formatting', () => {
+    runner.load(formattingYarnData);
+
+    let run = runner.run('FirstCourse');
+    let value = run.next().value;
+    expect(value.text).to.equal('You are 1st to reach the final line!');
+    run = runner.run('ThirdCourse');
+    value = run.next().value;
+    expect(value.text).to.equal('You are 3rd to reach the final line!');
+    run = runner.run('NoHope');
+    value = run.next().value;
+    expect(value.text).to.equal('You are 999th to reach the final line!');
+  });
+
+  it('Can select between values formatting', () => {
+    runner.load(formattingYarnData);
+
+    let run = runner.run('GenderMale');
+    let value = run.next().value;
+    expect(value.text).to.equal("Note: He'll remember that.");
+    run = runner.run('GenderFemale');
+    value = run.next().value;
+    expect(value.text).to.equal("Note: She'll remember that.");
+    run = runner.run('GenderNeutral');
+    value = run.next().value;
+    expect(value.text).to.equal("Note: They'll remember that.");
   });
 });
