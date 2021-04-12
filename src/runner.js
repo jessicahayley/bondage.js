@@ -4,13 +4,27 @@ const parser = require('./parser/parser.js');
 const results = require('./results.js');
 const DefaultVariableStorage = require('./default-variable-storage.js');
 const nodeTypes = require('./parser/nodes.js').types;
+const messageFormat = require('messageformat');
 
 class Runner {
-  constructor() {
+  /**
+   * Creates an instance of Runner.
+   * @param {object} [options]
+   * @param {object} options.compilerOptions
+   * @param {string} options.compilerOptions.language
+   * @memberof Runner
+   */
+  constructor(options = {}) {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
     this.functions = {};
     this.visited = {}; // Which nodes have been visited
+    this.options = {
+      compilerOptions: {
+        language: 'en' // Handle messageFormat language change
+      },
+      ...options // rewrite and insert if options contain data
+    }
 
     this.registerFunction('visited', (args) => {
       return !!this.visited[args[0]];
@@ -153,7 +167,7 @@ class Runner {
    * @param {any[]} selections
    */
   * handleSelections(selections) {
-    if (selections.length > 0 || selections[0] instanceof nodeTypes.Shortcut) {		  
+    if (selections.length > 0 || selections[0] instanceof nodeTypes.Shortcut) {
       // Multiple options to choose from (or just a single shortcut)
       // Filter out any conditional dialog options that result to false
       const filteredSelections = selections.filter((s) => {
