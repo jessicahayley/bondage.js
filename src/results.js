@@ -8,12 +8,12 @@ class TextResult extends Result {
    * @param {string} [text] text to be displayed
    * @param {int} [lineNum] line number of the result in the node
    */
-  constructor(text, formater, yarnNodeData, lineNum) {
+  constructor(text, yarnNodeData, lineNum, formater) {
     super();
     this.text = text; // If needed to get the original text from, use the this.data w/ line number
-    this.formater = formater; // Formater Function used for the text
     this.data = yarnNodeData;
     this.lineNum = lineNum;
+    this.formater = formater; // Formater Function used for the text
   }
 }
 

@@ -129,12 +129,10 @@ class Runner {
 
         if (node instanceof nodeTypes.Text) {
           // Text to be returned w/ formatting
-          const formatInstance = new MessageFormat(
-            this.options.formaterOptions.language || 'en' // Fallback language to English
-          );
+          const formatInstance = new MessageFormat(this.options.formaterOptions.language);
           const formater = formatInstance.compile(node.text);
 
-          yield new results.TextResult(formater(this.variables.data), formater, yarnNodeData, node.lineNum);
+          yield new results.TextResult(formater(this.variables.data), yarnNodeData, node.lineNum, formater);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
@@ -188,14 +186,13 @@ class Runner {
         return;
       }
 
+      const formatInstance = new MessageFormat(this.options.formaterOptions.language);
+
       const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
-        const formatInstance = new MessageFormat(
-          this.options.formaterOptions.language || 'en' // Fallback language to English
-        );
         const formater = formatInstance.compile(s.text);
 
         // Return the Text Result of the option
-        return new results.TextResult(formater(this.variables.data), formater, s, s.lineNum);
+        return new results.TextResult(formater(this.variables.data), s, s.lineNum, formater);
       }), filteredSelections.map((s) => {
         return s.lineNum || -1;
       }));
