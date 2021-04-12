@@ -44,6 +44,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "inquirer": "^3.0.6",
-    "jison": "^0.4.17"
+    "jison": "^0.4.17",
+    "messageformat": "^2.3.0"
   }
 }
