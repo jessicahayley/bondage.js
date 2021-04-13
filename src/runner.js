@@ -10,7 +10,8 @@ class Runner {
   /**
    * Creates an instance of Runner.
    * @param {object} [options] Options for the runner
-   * @param {string} options.language Options for the language of the formater
+   * @param {object} [options.formater] Changing default formater used (MessageFormat)
+   * @param {string} [options.language] Options for the language of the formater
    * @memberof Runner
    */
   constructor(options) {
@@ -18,11 +19,8 @@ class Runner {
     this.variables = new DefaultVariableStorage();
     this.functions = {};
     this.visited = {}; // Which nodes have been visited
-    this.options = {
-      language: 'en', // Handle messageFormat language change
-      ...options || {} // rewrite and insert if options contain data
-    };
-    this.messageFormater = new MessageFormat(this.options.language);
+    this.options = Object.assign.apply({ language: 'en' }, [{}].concat(options));
+    this.messageFormater = options.formater || new MessageFormat(this.options.language);
 
     this.registerFunction('visited', (args) => {
       return !!this.visited[args[0]];
