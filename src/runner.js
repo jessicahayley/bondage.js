@@ -18,8 +18,8 @@ class Runner {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
     this.functions = {};
-    this.visited = {}; // Which nodes have been visitedthis.options = options;
-    this.options = options;
+    this.visited = {}; // Which nodes have been visited
+    this.options = options || {};
     this.options.language = options.language || 'en';
     this.messageFormater = options.formater || new MessageFormat(this.options.language);
 
