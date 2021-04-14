@@ -1,0 +1,132 @@
+[
+	{
+		"title": "Start",
+		"tags": "",
+		"body": "<<set $traveler to \"Adventurer\">>\n<<set $class to \"Rogue\">>\n<<set $gold to 20>>\n\nHello {traveler}! who's your day going ?",
+		"position": {
+			"x": 38,
+			"y": -120
+		},
+		"colorID": 0
+	},
+	{
+		"title": "Tavern",
+		"tags": "",
+		"body": "You have {gold, plural, =0 {no gold, what a shame...} one {one piece inside your pocket.} other {# gold pieces!} }",
+		"position": {
+			"x": 442,
+			"y": -124
+		},
+		"colorID": 1
+	},
+	{
+		"title": "LowMoney",
+		"tags": "",
+		"body": "<<set $gold to 1>>\n[[Tavern]]",
+		"position": {
+			"x": 442,
+			"y": -415
+		},
+		"colorID": 1
+	},
+	{
+		"title": "NoMoney",
+		"tags": "",
+		"body": "<<set $gold to 0>>\n[[Tavern]]",
+		"position": {
+			"x": 201,
+			"y": -415
+		},
+		"colorID": 1
+	},
+	{
+		"title": "HighMoney",
+		"tags": "",
+		"body": "<<set $gold to 175>>\n[[Tavern]]",
+		"position": {
+			"x": 693,
+			"y": -415
+		},
+		"colorID": 1
+	},
+	{
+		"title": "Course",
+		"tags": "",
+		"body": "You are {position, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} to reach the final line!",
+		"position": {
+			"x": -440,
+			"y": -121
+		},
+		"colorID": 2
+	},
+	{
+		"title": "FirstCourse",
+		"tags": "",
+		"body": "<<set $position to 1>>\n[[Course]]",
+		"position": {
+			"x": -702,
+			"y": -511
+		},
+		"colorID": 2
+	},
+	{
+		"title": "ThirdCourse",
+		"tags": "",
+		"body": "<<set $position to 3>>\n[[Course]]",
+		"position": {
+			"x": -440,
+			"y": -511
+		},
+		"colorID": 2
+	},
+	{
+		"title": "NoHope",
+		"tags": "",
+		"body": "<<set $position to 999>>\n[[Course]]",
+		"position": {
+			"x": -202,
+			"y": -511
+		},
+		"colorID": 2
+	},
+	{
+		"title": "GenderMale",
+		"tags": "",
+		"body": "<<set $gender to \"male\">>\n[[Gender]]",
+		"position": {
+			"x": -239,
+			"y": 215
+		},
+		"colorID": 8
+	},
+	{
+		"title": "Gender",
+		"tags": "",
+		"body": "Note: {gender, select, male {He} female {She} other {They}}'ll remember that.",
+		"position": {
+			"x": 40,
+			"y": 476
+		},
+		"colorID": 8
+	},
+	{
+		"title": "GenderFemale",
+		"tags": "",
+		"body": "<<set $gender to \"female\">>\n[[Gender]]",
+		"position": {
+			"x": 40,
+			"y": 215
+		},
+		"colorID": 8
+	},
+	{
+		"title": "GenderNeutral",
+		"tags": "",
+		"body": "<<set $gender to \"\">>\n[[Gender]]",
+		"position": {
+			"x": 303,
+			"y": 215
+		},
+		"colorID": 8
+	}
+]

@@ -1,16 +1,25 @@
 'use strict';
 
+const MessageFormat = require('messageformat');
 const parser = require('./parser/parser.js');
 const results = require('./results.js');
 const DefaultVariableStorage = require('./default-variable-storage.js');
 const nodeTypes = require('./parser/nodes.js').types;
 
 class Runner {
-  constructor() {
+  /**
+   * Creates an instance of Runner.
+   * @param {object} [options] Options for the runner
+   * @param {object} [options.formater] Changing default formater used (MessageFormat)
+   * @param {string} [options.language] Options for the language of the formater
+   * @memberof Runner
+   */
+  constructor(options = { language: 'en' }) {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
     this.functions = {};
     this.visited = {}; // Which nodes have been visited
+    this.messageFormater = options.formater || new MessageFormat(options.language);
 
     this.registerFunction('visited', (args) => {
       return !!this.visited[args[0]];
@@ -114,8 +123,10 @@ class Runner {
         }
 
         if (node instanceof nodeTypes.Text) {
-          // Just text to be returned
-          yield new results.TextResult(node.text, yarnNodeData, node.lineNum);
+          // Text to be returned w/ formatting
+          const formater = this.messageFormater.compile(node.text);
+
+          yield new results.TextResult(formater(this.variables.data), yarnNodeData, node.lineNum);
         } else if (node instanceof nodeTypes.Link) {
           // Start accumulating link nodes
           selectionType = nodeTypes.Link;
@@ -170,7 +181,10 @@ class Runner {
       }
 
       const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
-        return s.text;
+        const formater = this.messageFormater.compile(s.text);
+
+        // Return the Text Result of the option
+        return formater(this.variables.data);
       }), filteredSelections.map((s) => {
         return s.lineNum || -1;
       }));

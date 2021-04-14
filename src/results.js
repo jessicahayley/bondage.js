@@ -10,7 +10,7 @@ class TextResult extends Result {
    */
   constructor(text, yarnNodeData, lineNum) {
     super();
-    this.text = text;
+    this.text = text; // If needed to get the original text from, use the this.data w/ line number
     this.data = yarnNodeData;
     this.lineNum = lineNum;
   }
@@ -33,7 +33,7 @@ class CommandResult extends Result {
 class OptionsResult extends Result {
   /**
    * Create a selectable list of options from the given list of text
-   * @param {string[]} [options] list of the text of options to be shown
+   * @param {string[]} [options] list of the strings of options to be shown
    * @param {int[]} [lineNum] list of the line numbers of options to be shown
    */
   constructor(options, lineNum) {
