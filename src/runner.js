@@ -1,10 +1,10 @@
 'use strict';
 
+const MessageFormat = require('messageformat');
 const parser = require('./parser/parser.js');
 const results = require('./results.js');
 const DefaultVariableStorage = require('./default-variable-storage.js');
 const nodeTypes = require('./parser/nodes.js').types;
-const MessageFormat = require('messageformat');
 
 class Runner {
   /**
