@@ -14,14 +14,12 @@ class Runner {
    * @param {string} [options.language] Options for the language of the formater
    * @memberof Runner
    */
-  constructor(options) {
+  constructor(options = { language: 'en' }) {
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
     this.functions = {};
     this.visited = {}; // Which nodes have been visited
-    this.options = options || {};
-    this.options.language = options.language || 'en';
-    this.messageFormater = options.formater || new MessageFormat(this.options.language);
+    this.messageFormater = options.formater || new MessageFormat(options.language);
 
     this.registerFunction('visited', (args) => {
       return !!this.visited[args[0]];
