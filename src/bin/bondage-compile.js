@@ -5,7 +5,7 @@
 const fs = require('fs');
 const program = require('commander');
 const Lexer = require('../lexer/lexer.js');
-const Parser = require('../parser/parser.js');
+const Parser = require('../parser/parser.js').parser;
 
 function showTokens(files) {
   // First, load all of the files that we were given

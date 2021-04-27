@@ -1,9 +1,14 @@
 'use strict';
+const parser = require(`./parser/parser`).parser;
+const Lexer = require('./lexer/lexer')
 
-const parser = require('./parser/parser.js');
+const yy = require('../src/parser/nodes.js');
+parser.lexer = new Lexer()
+parser.yy = yy
+
 const results = require('./results.js');
 const DefaultVariableStorage = require('./default-variable-storage.js');
-const nodeTypes = require('./parser/nodes.js').types;
+const nodeTypes = yy.types;
 
 class Runner {
   constructor() {
@@ -69,9 +74,9 @@ class Runner {
     // Parse the entire node
     const parserNodes = Array.from(parser.parse(yarnNode.body));
     const yarnNodeData = {
-      title:yarnNode.title,
-      tags:yarnNode.tags.split(" "),
-      body:yarnNode.body,
+      title: yarnNode.title,
+      tags: yarnNode.tags.split(" "),
+      body: yarnNode.body,
     }
     yield* this.evalNodes(parserNodes, yarnNodeData);
   }
@@ -85,7 +90,7 @@ class Runner {
     if (!nodes) return;
 
     let selectableNodes = null;
-		let jumpNode = null;
+    let jumpNode = null;
 
     // Either nodeTypes.Link or nodeTypes.Shortcut depending on which we're accumulating
     // (Since we don't want to accidentally lump shortcuts in with links)
@@ -96,9 +101,9 @@ class Runner {
     //  the weirdness here)
     for (const node of nodes) {
 
-			if (node instanceof nodeTypes.Jump){
-				jumpNode = node;
-			}
+      if (node instanceof nodeTypes.Jump) {
+        jumpNode = node;
+      }
       else if (selectableNodes !== null && node instanceof selectionType) {
         // We're accumulating selection nodes, so add this one to the list
         // TODO: handle conditional option nodes
@@ -139,9 +144,9 @@ class Runner {
       }
     }
 
-		if (jumpNode !== null) {
-			yield* this.run(jumpNode.identifier);
-		}
+    if (jumpNode !== null) {
+      yield* this.run(jumpNode.identifier);
+    }
     else if (selectableNodes !== null) {
       // At the end of the node, but we still need to handle any final options
       yield* this.handleSelections(selectableNodes);
@@ -253,47 +258,47 @@ class Runner {
         return this.evaluateExpressionOrLiteral(node.expression);
       } else if (node.type === 'ArithmeticExpressionAddNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) +
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'ArithmeticExpressionMinusNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) -
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'ArithmeticExpressionMultiplyNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) *
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'ArithmeticExpressionDivideNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) /
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'BooleanExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.booleanExpression);
       } else if (node.type === 'NegatedBooleanExpressionNode') {
         return !this.evaluateExpressionOrLiteral(node.booleanExpression);
       } else if (node.type === 'BooleanOrExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) ||
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'BooleanAndExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) &&
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'BooleanXorExpressionNode') {
         return !this.evaluateExpressionOrLiteral(node.expression1) !== // Cheating
-               !this.evaluateExpressionOrLiteral(node.expression2);
+          !this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'EqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) ===
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'NotEqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) !==
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'GreaterThanExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) >
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'GreaterThanOrEqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) >=
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'LessThanExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) <
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'LessThenOrEqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) <=
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       }
 
       throw new Error(`I don't recognize expression type ${node.type}`);

@@ -4,8 +4,9 @@
 'use strict';
 
 const chai = require('chai');
-const parser = require('../src/parser/parser.js');
+const parser = require('../src/parser/parser.js').parser;
 const nodes = require('../src/parser/nodes.js');
+parser.yy = nodes
 
 const expect = chai.expect;
 
@@ -24,7 +25,7 @@ describe('Parser', () => {
     const results = parser.parse('[[optiondest]]');
 
     const expected = [
-      new nodes.JumpNode('optiondest',  { first_line: results[0].lineNum }),
+      new nodes.JumpNode('optiondest', { first_line: results[0].lineNum }),
     ];
 
     expect(results).to.deep.equal(expected);
